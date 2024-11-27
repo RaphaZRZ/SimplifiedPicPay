@@ -1,7 +1,7 @@
 package com.picpaysimplificado.services;
 
 import com.picpaysimplificado.model.Transaction;
-import com.picpaysimplificado.model.TransactionDTO;
+import com.picpaysimplificado.dtos.TransactionDTO;
 import com.picpaysimplificado.model.Usuario;
 import com.picpaysimplificado.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
