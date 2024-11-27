@@ -31,7 +31,7 @@ public class Usuario {
     private String lastName;
 
     @NotNull
-    @Size(min = 11, max = 11)
+    @Size(min = 11, max = 14)
     @Column(name = "Documento")
     private String document;
 
@@ -48,5 +48,5 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Tipo")
-    private UsuarioTipo usuarioTipo;
+    private UsuarioType usuarioType;
 }
