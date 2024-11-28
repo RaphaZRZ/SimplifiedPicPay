@@ -1,4 +1,4 @@
-package com.picpaysimplificado.configs;
+package com.picpaysimplificado.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
