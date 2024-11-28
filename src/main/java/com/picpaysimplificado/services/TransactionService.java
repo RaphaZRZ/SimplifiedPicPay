@@ -55,24 +55,22 @@ public class TransactionService {
         this.usuarioService.saveUsuario(sender);
         this.usuarioService.saveUsuario(receiver);
 
-        /*
         // Notificações para usuários
         this.notificationService.sendNotification(sender, "Transação realizada com sucesso");
         this.notificationService.sendNotification(receiver, "Transação recebida com sucesso");
-         */
+
 
         return transaction;
     }
 
+    // Verificação com base numa API interna
     public boolean authorizeTransaction(Usuario sender, BigDecimal amount) {
-        return true;
-        /*
-        ResponseEntity<Map> authorizationResponse = restTemplate.getForEntity("https://util.devi.tools/api/v2/authorize", Map.class);
+        String internalApiURL = "http://localhost:8080/authorize-transaction-api";
 
-        if (authorizationResponse.getStatusCode() == HttpStatus.OK) {
-            String message = (String) authorizationResponse.getBody().get("message");
-            return "Autorizado".equalsIgnoreCase(message);
-        }
-        return false;*/
+        ResponseEntity<Boolean> authorizationResponse = restTemplate.getForEntity(internalApiURL, Boolean.class);
+
+        if (authorizationResponse.getStatusCode() == HttpStatus.OK)
+            return authorizationResponse.getBody();
+        return false; // Retorna falso se ocorrer algum erro
     }
 }
