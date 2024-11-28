@@ -1,6 +1,7 @@
 package com.picpaysimplificado.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -19,17 +20,21 @@ public class Transaction {
     @Column(name = "id", unique = true)
     private Long id;
 
+    @NotNull
     @Column(name = "valor")
     private BigDecimal amount;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "pagador_id")
-    private Usuario sender;
+    private Usuario senderId;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "recebedor_id")
-    private Usuario receiver;
+    private Usuario receiverId;
 
+    @NotNull
     @Column(name = "horario_transacao")
     private LocalDateTime timestamp;
 }

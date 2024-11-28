@@ -23,31 +23,43 @@ public class TransactionService {
     private UsuarioService usuarioService;
 
     @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
     private RestTemplate restTemplate; // Fazer requisições HTTP entre serviços
 
 
-    public void createTransaction(TransactionDTO transaction) throws Exception {
-        Usuario sender = this.usuarioService.findUsuarioById(transaction.senderId());
-        Usuario receiver = this.usuarioService.findUsuarioById(transaction.receiverId());
+    public Transaction  createTransaction(TransactionDTO transactionData) throws Exception {
+        Usuario sender = this.usuarioService.findUsuarioById(transactionData.senderId());
+        Usuario receiver = this.usuarioService.findUsuarioById(transactionData.receiverId());
 
-        this.usuarioService.validateTransaction(sender, transaction.value());
+        this.usuarioService.validateTransaction(sender, transactionData.value());
 
-        boolean isAuthorized = this.authorizeTransaction(sender, transaction.value());
+        boolean isAuthorized = this.authorizeTransaction(sender, transactionData.value());
         if (!isAuthorized)
             throw new Exception("Transação não autorizada.");
 
-        Transaction newTransaction = new Transaction();
-        newTransaction.setAmount(transaction.value());
-        newTransaction.setSender(sender);
-        newTransaction.setReceiver(receiver);
-        newTransaction.setTimestamp(LocalDateTime.now());
+        // Criando transação
+        Transaction transaction = new Transaction();
+        transaction.setAmount(transactionData.value());
+        transaction.setSenderId(sender);
+        transaction.setReceiverId(receiver);
+        transaction.setTimestamp(LocalDateTime.now());
 
-        sender.setBalance(sender.getBalance().subtract(transaction.value()));
-        receiver.setBalance(receiver.getBalance().add(transaction.value()));
+        // Atualizando saldo dos usuários
+        sender.setBalance(sender.getBalance().subtract(transactionData.value()));
+        receiver.setBalance(receiver.getBalance().add(transactionData.value()));
 
-        this.transactionRepository.save(newTransaction);
+        // Salvando transação e saldo os usuários
+        this.transactionRepository.save(transaction);
         this.usuarioService.saveUsuario(sender);
         this.usuarioService.saveUsuario(receiver);
+
+        // Notificações para usuários
+        this.notificationService.sendNotification(sender, "Transação realizada com sucesso");
+        this.notificationService.sendNotification(receiver, "Transação recebida com sucesso");
+
+        return transaction;
     }
 
     public boolean authorizeTransaction(Usuario sender, BigDecimal amount) {

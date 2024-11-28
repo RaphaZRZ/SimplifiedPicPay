@@ -33,7 +33,7 @@ public class UsuarioController {
     }
 
     @Validated
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Usuario> createUsuario(@Valid @RequestBody UsuarioDTO data) {
         Usuario newUsuario = this.usuarioService.createUsuario(data);
         return new ResponseEntity<>(newUsuario, HttpStatus.CREATED);
