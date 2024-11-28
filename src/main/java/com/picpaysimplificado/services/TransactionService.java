@@ -33,22 +33,22 @@ public class TransactionService {
         Usuario sender = this.usuarioService.findUsuarioById(transactionData.senderId());
         Usuario receiver = this.usuarioService.findUsuarioById(transactionData.receiverId());
 
-        this.usuarioService.validateTransaction(sender, transactionData.value());
+        this.usuarioService.validateTransaction(sender, transactionData.amount());
 
-        boolean isAuthorized = this.authorizeTransaction(sender, transactionData.value());
+        boolean isAuthorized = this.authorizeTransaction(sender, transactionData.amount());
         if (!isAuthorized)
             throw new Exception("Transação não autorizada.");
 
         // Criando transação
         Transaction transaction = new Transaction();
-        transaction.setAmount(transactionData.value());
+        transaction.setAmount(transactionData.amount());
         transaction.setSenderId(sender);
         transaction.setReceiverId(receiver);
         transaction.setTimestamp(LocalDateTime.now());
 
         // Atualizando saldo dos usuários
-        sender.setBalance(sender.getBalance().subtract(transactionData.value()));
-        receiver.setBalance(receiver.getBalance().add(transactionData.value()));
+        sender.setBalance(sender.getBalance().subtract(transactionData.amount()));
+        receiver.setBalance(receiver.getBalance().add(transactionData.amount()));
 
         // Salvando transação e saldo os usuários
         this.transactionRepository.save(transaction);
