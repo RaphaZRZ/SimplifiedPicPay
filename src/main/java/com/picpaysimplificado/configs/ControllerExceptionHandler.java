@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ControllerExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity threatDuplicateEntry(DataIntegrityViolationException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO("Usuário já cadastrado", "400");
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Usuário já cadastrado.", "400");
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
