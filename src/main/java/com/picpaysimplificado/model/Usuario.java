@@ -9,13 +9,13 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@Entity(name = "usuarios")
-@Table(name = "usuarios")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@Entity(name = "usuarios")
+@Table(name = "usuarios")
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

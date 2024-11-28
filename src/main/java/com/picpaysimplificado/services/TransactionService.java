@@ -29,7 +29,7 @@ public class TransactionService {
     private RestTemplate restTemplate; // Fazer requisições HTTP entre serviços
 
 
-    public Transaction  createTransaction(TransactionDTO transactionData) throws Exception {
+    public Transaction createTransaction(TransactionDTO transactionData) throws Exception {
         Usuario sender = this.usuarioService.findUsuarioById(transactionData.senderId());
         Usuario receiver = this.usuarioService.findUsuarioById(transactionData.receiverId());
 

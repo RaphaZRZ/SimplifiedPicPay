@@ -20,7 +20,7 @@ public class NotificationService {
 
         ResponseEntity<String> notificationResponse = restTemplate.postForEntity("https://util.devi.tools/api/v1/notify", notificationRequest, String.class);
 
-        if(!(notificationResponse.getStatusCode() == HttpStatus.OK))
+        if (!(notificationResponse.getStatusCode() == HttpStatus.OK))
             throw new Exception("Serviço de notificação está fora do ar.");
     }
 }
