@@ -1,10 +1,9 @@
-package com.picpaysimplificado.serializer;
+package com.picpaysimplificado.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import javax.print.attribute.standard.PDLOverrideSupported;
 import java.io.IOException;
 
 public class DocumentSerializer extends JsonSerializer<String> {

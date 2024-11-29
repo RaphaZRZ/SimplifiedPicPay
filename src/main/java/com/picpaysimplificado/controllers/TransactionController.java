@@ -1,7 +1,7 @@
 package com.picpaysimplificado.controllers;
 
 import com.picpaysimplificado.dtos.TransactionDTO;
-import com.picpaysimplificado.model.Transaction;
+import com.picpaysimplificado.models.Transaction;
 import com.picpaysimplificado.services.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

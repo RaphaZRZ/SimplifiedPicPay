@@ -1,4 +1,4 @@
-package com.picpaysimplificado.model;
+package com.picpaysimplificado.models;
 
 public enum UsuarioType {
     COMMON,

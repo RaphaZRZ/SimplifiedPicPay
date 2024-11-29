@@ -1,6 +1,6 @@
 package com.picpaysimplificado.repositories;
 
-import com.picpaysimplificado.model.Usuario;
+import com.picpaysimplificado.models.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

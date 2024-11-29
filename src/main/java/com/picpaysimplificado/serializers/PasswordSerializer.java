@@ -1,4 +1,4 @@
-package com.picpaysimplificado.serializer;
+package com.picpaysimplificado.serializers;
 
 
 import com.fasterxml.jackson.core.JsonGenerator;

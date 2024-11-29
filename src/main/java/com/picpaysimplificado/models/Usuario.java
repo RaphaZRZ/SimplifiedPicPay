@@ -1,10 +1,9 @@
-package com.picpaysimplificado.model;
+package com.picpaysimplificado.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.picpaysimplificado.dtos.UsuarioDTO;
-import com.picpaysimplificado.serializer.DocumentSerializer;
-import com.picpaysimplificado.serializer.PasswordSerializer;
+import com.picpaysimplificado.serializers.DocumentSerializer;
+import com.picpaysimplificado.serializers.PasswordSerializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

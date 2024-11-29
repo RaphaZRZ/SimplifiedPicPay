@@ -1,8 +1,8 @@
 package com.picpaysimplificado.services;
 
 import com.picpaysimplificado.dtos.UsuarioDTO;
-import com.picpaysimplificado.model.Usuario;
-import com.picpaysimplificado.model.UsuarioType;
+import com.picpaysimplificado.models.Usuario;
+import com.picpaysimplificado.models.UsuarioType;
 import com.picpaysimplificado.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

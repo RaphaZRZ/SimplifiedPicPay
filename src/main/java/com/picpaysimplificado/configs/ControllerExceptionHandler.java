@@ -1,4 +1,4 @@
-package com.picpaysimplificado.config;
+package com.picpaysimplificado.configs;
 
 import com.picpaysimplificado.dtos.ExceptionDTO;
 import jakarta.persistence.EntityNotFoundException;

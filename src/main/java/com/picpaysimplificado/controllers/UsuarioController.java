@@ -1,7 +1,7 @@
 package com.picpaysimplificado.controllers;
 
 import com.picpaysimplificado.dtos.UsuarioDTO;
-import com.picpaysimplificado.model.Usuario;
+import com.picpaysimplificado.models.Usuario;
 import com.picpaysimplificado.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
