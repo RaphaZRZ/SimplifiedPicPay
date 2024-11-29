@@ -1,6 +1,9 @@
 package com.picpaysimplificado.services;
 
 import com.picpaysimplificado.dtos.UsuarioDTO;
+import com.picpaysimplificado.exceptions.InsufficientBalanceException;
+import com.picpaysimplificado.exceptions.MerchantTransactionNotAllowedException;
+import com.picpaysimplificado.exceptions.UserNotFoundException;
 import com.picpaysimplificado.models.Usuario;
 import com.picpaysimplificado.models.UsuarioType;
 import com.picpaysimplificado.repositories.UsuarioRepository;
@@ -18,14 +21,18 @@ public class UsuarioService {
 
     public void validateTransaction(Usuario sender, BigDecimal amount) throws Exception {
         if (sender.getUsuarioType() == UsuarioType.MERCHANT)
-            throw new Exception("Usuário do tipo lojista não está autorizado a realizar transação.");
+            throw new MerchantTransactionNotAllowedException();
 
         if (sender.getBalance().compareTo(amount) < 0)
-            throw new Exception("Saldo insuficiente.");
+            throw new InsufficientBalanceException();
     }
 
     public Usuario findUsuarioById(Long id) throws Exception {
-        return this.usuarioRepository.findById(id).orElseThrow(() -> new Exception("Usuário não encontrado"));
+        return this.usuarioRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    }
+
+    public Usuario findUsuarioByDocument(String document) throws Exception {
+        return this.usuarioRepository.findUsuarioByDocument(document).orElseThrow(UserNotFoundException::new);
     }
 
     public List<Usuario> findAllUsuarios() {

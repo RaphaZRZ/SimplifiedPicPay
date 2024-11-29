@@ -11,9 +11,9 @@ public class DocumentSerializer extends JsonSerializer<String> {
     public void serialize(String document, JsonGenerator gen, SerializerProvider serializerProvider) throws IOException {
         String maskedDocument = document;
 
-        if (document.length() == 11)
+        if (document.length() == 11) // CPF
             maskedDocument = document.substring(0, 3) + ".***.***-" + document.substring(9, 11);
-        else if (document.length() == 14)
+        else if (document.length() == 14) // CNPJ
             maskedDocument = document.substring(0, 2) + ".***.***/" + document.substring(8, 12) + "-" + document.substring(12, 14);
 
 

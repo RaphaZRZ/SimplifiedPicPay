@@ -1,5 +1,6 @@
 package com.picpaysimplificado.services;
 
+import com.picpaysimplificado.exceptions.NotificationServiceOfflineException;
 import com.picpaysimplificado.models.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class NotificationService {
         String email = usuario.getEmail();
 
         if (randomValue < 15)
-            System.out.println("Notificação enviada para o email " + email +" com sucesso.");
-        else throw new Exception("Serviço de notificação está fora do ar.");
+            System.out.println("Notificação enviada para o email " + email +" com sucesso.\n" + message);
+        else throw new NotificationServiceOfflineException();
     }
 }

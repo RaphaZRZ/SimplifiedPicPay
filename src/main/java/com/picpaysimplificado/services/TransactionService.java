@@ -1,5 +1,6 @@
 package com.picpaysimplificado.services;
 
+import com.picpaysimplificado.exceptions.UnauthorizedTransactionException;
 import com.picpaysimplificado.models.Transaction;
 import com.picpaysimplificado.dtos.TransactionDTO;
 import com.picpaysimplificado.models.Usuario;
@@ -36,7 +37,7 @@ public class TransactionService {
 
         boolean isAuthorized = this.authorizeTransaction(sender, transactionData.amount());
         if (!isAuthorized)
-            throw new Exception("Transação não autorizada.");
+            throw new UnauthorizedTransactionException();
 
         // Criando transação
         Transaction transaction = new Transaction();

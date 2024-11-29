@@ -2,6 +2,8 @@ package com.picpaysimplificado.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.picpaysimplificado.dtos.UsuarioDTO;
+import com.picpaysimplificado.exceptions.InvalidCNPJException;
+import com.picpaysimplificado.exceptions.InvalidCPFException;
 import com.picpaysimplificado.serializers.DocumentSerializer;
 import com.picpaysimplificado.serializers.PasswordSerializer;
 import jakarta.persistence.*;
@@ -59,10 +61,10 @@ public class Usuario {
 
     public Usuario(UsuarioDTO usuarioData) throws Exception {
         if (usuarioData.usuarioType() == UsuarioType.MERCHANT && usuarioData.document().length() != 14)
-            throw new Exception("CNPJ inválido.");
+            throw new InvalidCNPJException();
 
-        if (usuarioData.usuarioType() == UsuarioType.COMMON && usuarioData.document().length() != 11)
-            throw new Exception("CPF inválido.");
+        else if (usuarioData.usuarioType() == UsuarioType.COMMON && usuarioData.document().length() != 11)
+            throw new InvalidCPFException();
 
         this.firstName = usuarioData.firstName();
         this.lastName = usuarioData.lastName();
