@@ -3,6 +3,7 @@ package com.picpaysimplificado.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.picpaysimplificado.dtos.UsuarioDTO;
+import com.picpaysimplificado.serializer.DocumentSerializer;
 import com.picpaysimplificado.serializer.PasswordSerializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -36,8 +37,7 @@ public class Usuario {
     private String lastName;
 
     @NotNull
-    @Size(min = 11, max = 14, message = "Documento inválido.")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonSerialize(using = DocumentSerializer.class)
     @Column(name = "documento")
     private String document;
 
