@@ -58,13 +58,19 @@ public class Usuario {
     @Column(name = "tipo")
     private UsuarioType usuarioType;
 
-    public Usuario(UsuarioDTO data) {
-        this.firstName = data.firstName();
-        this.lastName = data.lastName();
-        this.document = data.document();
-        this.email = data.email();
-        this.password = data.password();
-        this.balance = data.balance();
-        this.usuarioType = data.usuarioType();
+    public Usuario(UsuarioDTO usuarioData) throws Exception {
+        if (usuarioData.usuarioType() == UsuarioType.MERCHANT && usuarioData.document().length() != 14)
+            throw new Exception("CNPJ inválido.");
+
+        if (usuarioData.usuarioType() == UsuarioType.COMMON && usuarioData.document().length() != 11)
+            throw new Exception("CPF inválido.");
+
+        this.firstName = usuarioData.firstName();
+        this.lastName = usuarioData.lastName();
+        this.document = usuarioData.document();
+        this.email = usuarioData.email();
+        this.password = usuarioData.password();
+        this.balance = usuarioData.balance();
+        this.usuarioType = usuarioData.usuarioType();
     }
 }

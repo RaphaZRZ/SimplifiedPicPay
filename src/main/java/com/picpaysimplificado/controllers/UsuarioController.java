@@ -34,8 +34,8 @@ public class UsuarioController {
 
     @Validated
     @PostMapping
-    public ResponseEntity<Usuario> createUsuario(@Valid @RequestBody UsuarioDTO data) {
-        Usuario newUsuario = this.usuarioService.createUsuario(data);
-        return new ResponseEntity<>(newUsuario, HttpStatus.CREATED);
+    public ResponseEntity<Usuario> createUsuario(@Valid @RequestBody UsuarioDTO data) throws Exception{
+        Usuario usuario = this.usuarioService.createUsuario(data);
+        return new ResponseEntity<>(usuario, HttpStatus.CREATED);
     }
 }

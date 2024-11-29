@@ -36,9 +36,9 @@ public class UsuarioService {
         this.usuarioRepository.save(usuario);
     }
 
-    public Usuario createUsuario(UsuarioDTO data) {
-        Usuario newUsuario = new Usuario(data);
-        saveUsuario(newUsuario);
-        return newUsuario;
+    public Usuario createUsuario(UsuarioDTO usuarioData) throws Exception{
+        Usuario Usuario = new Usuario(usuarioData);
+        saveUsuario(Usuario);
+        return Usuario;
     }
 }
