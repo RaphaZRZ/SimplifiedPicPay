@@ -26,6 +26,12 @@ public class UsuarioController {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping("/{document}")
+    public ResponseEntity<Usuario> findUsuarioByDocument(@PathVariable String document) throws Exception {
+        Usuario obj = this.usuarioService.findUsuarioByDocument(document);
+        return ResponseEntity.ok().body(obj);
+    }
+
     @GetMapping
     public ResponseEntity<List<Usuario>> findAllUsuarios() {
         List<Usuario> objs = this.usuarioService.findAllUsuarios();
