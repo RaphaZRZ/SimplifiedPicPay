@@ -20,13 +20,13 @@ public class UsuarioController {
     UsuarioService usuarioService;
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Usuario> findUsuarioById(@PathVariable Long id) throws Exception {
         Usuario obj = this.usuarioService.findUsuarioById(id);
         return ResponseEntity.ok().body(obj);
     }
 
-    @GetMapping("/{document}")
+    @GetMapping("/document/{document}")
     public ResponseEntity<Usuario> findUsuarioByDocument(@PathVariable String document) throws Exception {
         Usuario obj = this.usuarioService.findUsuarioByDocument(document);
         return ResponseEntity.ok().body(obj);
