@@ -1,5 +1,6 @@
 package com.picpaysimplificado.services;
 
+import com.picpaysimplificado.exceptions.NotificationServiceOfflineException;
 import com.picpaysimplificado.exceptions.UnauthorizedTransactionException;
 import com.picpaysimplificado.models.Transaction;
 import com.picpaysimplificado.dtos.TransactionDTO;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -35,7 +35,7 @@ public class TransactionService {
 
         this.usuarioService.validateTransaction(sender, transactionData.amount());
 
-        boolean isAuthorized = this.authorizeTransaction(sender, transactionData.amount());
+        boolean isAuthorized = this.authorizeTransaction();
         if (!isAuthorized)
             throw new UnauthorizedTransactionException();
 
@@ -55,7 +55,11 @@ public class TransactionService {
         this.usuarioService.saveUsuario(sender);
         this.usuarioService.saveUsuario(receiver);
 
-        // Notificações para usuários
+        boolean notifyUserisOnline = notifyUser();
+        if (!notifyUserisOnline)
+            throw new NotificationServiceOfflineException();
+
+        // Notifica osusuários
         this.notificationService.sendNotification(sender, "Transação realizada com sucesso");
         this.notificationService.sendNotification(receiver, "Transação recebida com sucesso");
 
@@ -63,14 +67,25 @@ public class TransactionService {
         return transaction;
     }
 
-    // Verificação com base numa API interna
-    public boolean authorizeTransaction(Usuario sender, BigDecimal amount) {
+    // Verificação da autorização da transação com base numa API interna
+    public boolean authorizeTransaction() {
         String internalApiURL = "http://localhost:8080/authorize-transaction-api";
 
-        ResponseEntity<Boolean> authorizationResponse = restTemplate.getForEntity(internalApiURL, Boolean.class);
+        ResponseEntity<Boolean> authorizationResponse = this.restTemplate.getForEntity(internalApiURL, Boolean.class);
 
-        if (authorizationResponse.getStatusCode() == HttpStatus.OK)
+        if (authorizationResponse.getStatusCode() == HttpStatus.OK) // Se a API funcionar corretamente
             return authorizationResponse.getBody();
         return false; // Retorna falso se ocorrer algum erro
+    }
+
+    // Verifica se o serviço de envio de emails está online
+    public boolean notifyUser() {
+        String internalApiURL = "http://localhost:8080/notify-user-api";
+
+        ResponseEntity<Boolean> notifyResponse = this.restTemplate.getForEntity(internalApiURL, boolean.class);
+
+        if (notifyResponse.getStatusCode() == HttpStatus.OK)
+            return notifyResponse.getBody();
+        return false;
     }
 }

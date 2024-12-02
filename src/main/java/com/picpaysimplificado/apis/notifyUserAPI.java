@@ -11,8 +11,8 @@ public class notifyUserAPI {
     @GetMapping
     public ResponseEntity<Boolean> notificationSended() {
         // simula a lógica do consumo de uma API
-        boolean isSended = Math.random() > 0.2; // 80% de chance de ser notificado
+        boolean isSent = Math.random() > 0.2; // 80% de chance de ser notificado
 
-        return ResponseEntity.ok(isSended);
+        return ResponseEntity.ok(isSent);
     }
 }
