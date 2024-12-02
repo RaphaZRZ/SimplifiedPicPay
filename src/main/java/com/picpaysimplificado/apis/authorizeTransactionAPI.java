@@ -11,8 +11,8 @@ public class authorizeTransactionAPI {
     @GetMapping
     public ResponseEntity<Boolean> authorize() {
         // simula a lógica do consumo de uma API
-        boolean authorized = Math.random() > 0.3; // 70% de chance de retornar autorizado
+        boolean isAuthorized = Math.random() > 0.3; // 70% de chance de retornar autorizado
 
-        return ResponseEntity.ok(authorized);
+        return ResponseEntity.ok(isAuthorized);
     }
 }
