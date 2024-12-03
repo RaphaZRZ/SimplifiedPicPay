@@ -48,6 +48,7 @@ public class Usuario {
     private String email;
 
     @NotNull
+    @Size(min = 6, max = 60, message = "A senha deve conter de 6 a 60 caracteres.")
     @JsonSerialize(using = PasswordSerializer.class)
     @Column(name = "senha")
     private String password;
