@@ -53,9 +53,11 @@ public class Usuario {
     @Column(name = "senha")
     private String password;
 
+    @NotNull
     @Column(name = "saldo")
     private BigDecimal balance;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
     private UsuarioType usuarioType;

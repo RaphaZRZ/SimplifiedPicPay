@@ -12,19 +12,21 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice // Inicializa a classe na inicialização do Spring Boot
 public class ControllerExceptionHandler {
-    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ExceptionHandler(DataIntegrityViolationException.class) // Validar usuários já cadastrado
     public ResponseEntity threatDuplicateEntry(DataIntegrityViolationException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO("Usuário já cadastrado.", "400");
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
+    // Validar as anotações BEAN na hora de salvar ou alterar dados no banco de dados
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity threatValidationException(ConstraintViolationException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO("Erro na validação: " + exception.getMessage(), "400");
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class) // Validar as anotações BEAN
+    // Validar as anotações BEAN quando um objeto é inválido como argumento de um end-point
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity threatBeanValidationException(MethodArgumentNotValidException exception) {
         String errorMessage = exception.getBindingResult().getAllErrors().stream().findFirst().map(ObjectError::getDefaultMessage).orElse("Erro de validação.");
         ExceptionDTO exceptionDTO = new ExceptionDTO(errorMessage, "400");
