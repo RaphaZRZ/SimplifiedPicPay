@@ -49,7 +49,7 @@ public class UsuarioController {
     @Validated
     @PutMapping("/id/{id}")
     public ResponseEntity<Void> updateUsuario(@Valid @RequestBody UpdatePasswordDTO passwordData, @PathVariable Long id) throws Exception {
-        this.usuarioService.updateUsuario(passwordData);
+        this.usuarioService.updateUsuario(passwordData, id);
         return ResponseEntity.noContent().build();
     }
 }

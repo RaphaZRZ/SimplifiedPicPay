@@ -1,4 +1,4 @@
 package com.picpaysimplificado.dtos;
 
-public record UpdatePasswordDTO(Long id, String password) {
+public record UpdatePasswordDTO(String password) {
 }

@@ -53,8 +53,8 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void updateUsuario(UpdatePasswordDTO passwordData) throws Exception {
-        Usuario updatedUser = this.usuarioRepository.findById(passwordData.id()).orElseThrow(UserNotFoundException::new);
+    public void updateUsuario(UpdatePasswordDTO passwordData, Long id) throws Exception {
+        Usuario updatedUser = this.usuarioRepository.findById(id).orElseThrow(UserNotFoundException::new);
         updatedUser.setPassword(passwordData.password());
         this.usuarioRepository.save(updatedUser);
     }
