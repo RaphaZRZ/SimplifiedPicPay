@@ -1,5 +1,6 @@
 package com.picpaysimplificado.services;
 
+import com.picpaysimplificado.dtos.UpdatePasswordDTO;
 import com.picpaysimplificado.dtos.UsuarioDTO;
 import com.picpaysimplificado.exceptions.InsufficientBalanceException;
 import com.picpaysimplificado.exceptions.MerchantTransactionNotAllowedException;
@@ -52,8 +53,9 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void updateUsuario(Usuario usuario, Long id) throws Exception {
-        Usuario newUsuario = this.usuarioRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        // newUsuario.set // continuar
+    public void updateUsuario(UpdatePasswordDTO passwordData) throws Exception {
+        Usuario updatedUser = this.usuarioRepository.findById(passwordData.id()).orElseThrow(UserNotFoundException::new);
+        updatedUser.setPassword(passwordData.password());
+        this.usuarioRepository.save(updatedUser);
     }
 }

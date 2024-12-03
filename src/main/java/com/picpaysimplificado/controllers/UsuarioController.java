@@ -1,5 +1,6 @@
 package com.picpaysimplificado.controllers;
 
+import com.picpaysimplificado.dtos.UpdatePasswordDTO;
 import com.picpaysimplificado.dtos.UsuarioDTO;
 import com.picpaysimplificado.models.Usuario;
 import com.picpaysimplificado.services.UsuarioService;
@@ -47,8 +48,8 @@ public class UsuarioController {
 
     @Validated
     @PutMapping("/id/{id}")
-    public ResponseEntity<Void> updateUsuario(@Valid @RequestBody Usuario usuario, @PathVariable Long id) throws Exception {
-        Usuario obj = this.usuarioService.updateUsuario(usuario, id);
+    public ResponseEntity<Void> updateUsuario(@Valid @RequestBody UpdatePasswordDTO passwordData, @PathVariable Long id) throws Exception {
+        this.usuarioService.updateUsuario(passwordData);
         return ResponseEntity.noContent().build();
     }
 }
