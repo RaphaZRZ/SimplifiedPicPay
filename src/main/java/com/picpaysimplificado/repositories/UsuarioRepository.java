@@ -8,5 +8,11 @@ import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    // Verificar existência de informações no banco de dados
+    boolean existsByEmail(String email);
+
+    boolean existsByDocument(String document);
+
+    // Encontrar informações no banco de dados
     Optional<Usuario> findUsuarioByDocument(String document);
 }

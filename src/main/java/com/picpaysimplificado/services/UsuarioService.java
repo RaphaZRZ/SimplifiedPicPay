@@ -2,9 +2,7 @@ package com.picpaysimplificado.services;
 
 import com.picpaysimplificado.dtos.UpdatePasswordDTO;
 import com.picpaysimplificado.dtos.UsuarioDTO;
-import com.picpaysimplificado.exceptions.InsufficientBalanceException;
-import com.picpaysimplificado.exceptions.MerchantTransactionNotAllowedException;
-import com.picpaysimplificado.exceptions.UserNotFoundException;
+import com.picpaysimplificado.exceptions.*;
 import com.picpaysimplificado.models.Usuario;
 import com.picpaysimplificado.models.UsuarioType;
 import com.picpaysimplificado.repositories.UsuarioRepository;
@@ -46,7 +44,13 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario createUsuario(UsuarioDTO usuarioData) throws Exception{
+    public Usuario createUsuario(UsuarioDTO usuarioData) throws Exception {
+        // Verifica se as informações únicas já estão cadastradas no banco de dados
+        if (this.usuarioRepository.existsByEmail(usuarioData.email()))
+            throw new EmailAlreadyExistsException();
+        if (this.usuarioRepository.existsByDocument(usuarioData.document()))
+            throw new DocumentAlreadyExistsException();
+
         Usuario usuario = new Usuario(usuarioData);
         saveUsuario(usuario);
         return usuario;

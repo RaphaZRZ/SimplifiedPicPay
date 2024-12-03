@@ -39,7 +39,7 @@ public class Usuario {
 
     @NotNull
     @JsonSerialize(using = DocumentSerializer.class)
-    @Column(name = "documento")
+    @Column(name = "documento", unique = true)
     private String document;
 
     @NotNull
