@@ -40,8 +40,15 @@ public class UsuarioController {
 
     @Validated
     @PostMapping
-    public ResponseEntity<Usuario> createUsuario(@Valid @RequestBody UsuarioDTO data) throws Exception{
-        Usuario usuario = this.usuarioService.createUsuario(data);
+    public ResponseEntity<Usuario> createUsuario(@Valid @RequestBody UsuarioDTO usuarioData) throws Exception {
+        Usuario usuario = this.usuarioService.createUsuario(usuarioData);
         return new ResponseEntity<>(usuario, HttpStatus.CREATED);
+    }
+
+    @Validated
+    @PutMapping("/id/{id}")
+    public ResponseEntity<Void> updateUsuario(@Valid @RequestBody Usuario usuario, @PathVariable Long id) throws Exception {
+        Usuario obj = this.usuarioService.updateUsuario(usuario, id);
+        return ResponseEntity.noContent().build();
     }
 }

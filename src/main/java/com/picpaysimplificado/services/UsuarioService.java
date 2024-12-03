@@ -9,6 +9,7 @@ import com.picpaysimplificado.models.UsuarioType;
 import com.picpaysimplificado.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -43,9 +44,16 @@ public class UsuarioService {
         this.usuarioRepository.save(usuario);
     }
 
+    @Transactional
     public Usuario createUsuario(UsuarioDTO usuarioData) throws Exception{
-        Usuario Usuario = new Usuario(usuarioData);
-        saveUsuario(Usuario);
-        return Usuario;
+        Usuario usuario = new Usuario(usuarioData);
+        saveUsuario(usuario);
+        return usuario;
+    }
+
+    @Transactional
+    public void updateUsuario(Usuario usuario, Long id) throws Exception {
+        Usuario newUsuario = this.usuarioRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        // newUsuario.set // continuar
     }
 }
