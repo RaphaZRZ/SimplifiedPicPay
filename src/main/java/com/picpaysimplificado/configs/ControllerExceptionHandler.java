@@ -2,12 +2,15 @@ package com.picpaysimplificado.configs;
 
 import com.picpaysimplificado.dtos.ExceptionDTO;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+@RestControllerAdvice // Inicializa a classe na inicialização do Spring Boot
 public class ControllerExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity threatDuplicateEntry(DataIntegrityViolationException exception) {
@@ -15,9 +18,23 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity threatValidationException(ConstraintViolationException exception) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Erro na validação: " + exception.getMessage(), "400");
+        return ResponseEntity.badRequest().body(exceptionDTO);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class) // Validar as anotações BEAN
+    public ResponseEntity threatBeanValidationException(MethodArgumentNotValidException exception) {
+        String errorMessage = exception.getBindingResult().getAllErrors().stream().findFirst().map(ObjectError::getDefaultMessage).orElse("Erro de validação.");
+        ExceptionDTO exceptionDTO = new ExceptionDTO(errorMessage, "400");
+        return ResponseEntity.badRequest().body(exceptionDTO);
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity threat404(EntityNotFoundException exception) {
-        return ResponseEntity.notFound().build();
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Recurso não encontrado.", "404");
+        return ResponseEntity.status(404).body(exceptionDTO);
     }
 
     @ExceptionHandler(Exception.class)
