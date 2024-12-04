@@ -62,4 +62,13 @@ public class UsuarioService {
         updatedUser.setPassword(passwordData.password());
         this.usuarioRepository.save(updatedUser);
     }
+
+    @Transactional
+    public void deleteUsuario(Long id) throws Exception {
+        // Poderia utilizar o método findUsuarioById, porém traria um retorno de um objeto Usuário desnecessário
+        if (!this.usuarioRepository.existsById(id))
+            throw new UserNotFoundException();
+
+        this.usuarioRepository.deleteById(id);
+    }
 }

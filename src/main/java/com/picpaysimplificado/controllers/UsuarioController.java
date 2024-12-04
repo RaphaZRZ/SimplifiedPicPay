@@ -53,4 +53,10 @@ public class UsuarioController {
         this.usuarioService.updateUsuario(passwordData, id);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) throws Exception {
+        this.usuarioService.deleteUsuario(id);
+        return ResponseEntity.noContent().build();
+    }
 }
