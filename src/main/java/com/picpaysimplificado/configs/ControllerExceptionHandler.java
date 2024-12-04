@@ -1,6 +1,5 @@
 package com.picpaysimplificado.configs;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.picpaysimplificado.dtos.ExceptionDTO;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;

@@ -50,19 +50,25 @@ public class TransactionService {
         sender.setBalance(sender.getBalance().subtract(transactionData.amount()));
         receiver.setBalance(receiver.getBalance().add(transactionData.amount()));
 
-        // Salvando transação e saldo os usuários
-        this.transactionRepository.save(transaction);
+        // Atualizando saldo dos usuários
         this.usuarioService.saveUsuario(sender);
         this.usuarioService.saveUsuario(receiver);
 
         boolean notifyUserisOnline = notifyUser();
-        if (!notifyUserisOnline)
+        if (!notifyUserisOnline) {
+            /*
+                O professor de salvamento de dados poderia acontecer após a verificação do status do servidor de
+                notificações, porém quero simular o caso de estorno de uma transação
+             */
+            sender.setBalance(sender.getBalance().add(transactionData.amount()));
+            receiver.setBalance(receiver.getBalance().subtract(transactionData.amount()));
             throw new NotificationServiceOfflineException();
+        }
 
-        // Notifica osusuários
+        // Notifica os usuários e salva a transação
         this.notificationService.sendNotification(sender, "Transação realizada com sucesso");
         this.notificationService.sendNotification(receiver, "Transação recebida com sucesso");
-
+        this.transactionRepository.save(transaction);
 
         return transaction;
     }
@@ -84,7 +90,7 @@ public class TransactionService {
 
         ResponseEntity<Boolean> notifyResponse = this.restTemplate.getForEntity(internalApiURL, boolean.class);
 
-        if (notifyResponse.getStatusCode() == HttpStatus.OK)
+        if (notifyResponse.getStatusCode() == HttpStatus.OK) // Se a API funcionar corretamente
             return notifyResponse.getBody();
         return false;
     }
