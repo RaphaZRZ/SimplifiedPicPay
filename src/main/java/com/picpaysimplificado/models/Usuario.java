@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.picpaysimplificado.dtos.UsuarioDTO;
 import com.picpaysimplificado.exceptions.InvalidCNPJException;
 import com.picpaysimplificado.exceptions.InvalidCPFException;
-import com.picpaysimplificado.exceptions.InvalidUserTypeException;
 import com.picpaysimplificado.serializers.DocumentSerializer;
 import com.picpaysimplificado.serializers.PasswordSerializer;
 import jakarta.persistence.*;
