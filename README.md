@@ -1,4 +1,4 @@
-﻿<h1>payerAndReceiverSystem</h1>
+﻿<h1>Simplified PicPay</h1>
 
 
 <h2>About the project</h2>
