@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +16,13 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class) // Validar usuários já cadastrado
     public ResponseEntity threatDuplicateEntry(DataIntegrityViolationException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO("Usuário já cadastrado.", "400");
+        return ResponseEntity.badRequest().body(exceptionDTO);
+    }
+
+    // Validar tipo do usuário
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ExceptionDTO> handleInvalidEnumValue(HttpMessageNotReadableException exception) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Tipo de usuário inválido.", "400");
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
