@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -35,16 +36,13 @@ public class TransactionService {
 
         this.usuarioService.validateTransaction(sender, transactionData.amount());
 
+        // Verifica se a transação é autorizada
         boolean isAuthorized = this.authorizeTransaction();
         if (!isAuthorized)
             throw new UnauthorizedTransactionException();
 
         // Criando transação
-        Transaction transaction = new Transaction();
-        transaction.setAmount(transactionData.amount());
-        transaction.setSenderId(sender);
-        transaction.setReceiverId(receiver);
-        transaction.setTimestamp(LocalDateTime.now());
+        Transaction transaction = buildTransaction(transactionData.amount(), sender, receiver);
 
         // Atualizando saldo dos usuários
         sender.setBalance(sender.getBalance().subtract(transactionData.amount()));
@@ -54,23 +52,34 @@ public class TransactionService {
         this.usuarioService.saveUsuario(sender);
         this.usuarioService.saveUsuario(receiver);
 
-        boolean notifyUserisOnline = notifyUser();
-        if (!notifyUserisOnline) {
-            /*
-                O professor de salvamento de dados poderia acontecer após a verificação do status do servidor de
-                notificações, porém quero simular o caso de estorno de uma transação
-             */
-            sender.setBalance(sender.getBalance().add(transactionData.amount()));
-            receiver.setBalance(receiver.getBalance().subtract(transactionData.amount()));
+        // Verificar se o sistema de notificação está online, reverter transação caso esteja offline
+        boolean notifyUserIsOnline = notifyUser();
+        if (!notifyUserIsOnline) {
+            rollbackTransaction(transactionData.amount(), sender, receiver);
             throw new NotificationServiceOfflineException();
         }
 
         // Notifica os usuários e salva a transação
-        this.notificationService.sendNotification(sender, "Transação realizada com sucesso");
-        this.notificationService.sendNotification(receiver, "Transação recebida com sucesso");
+        this.notificationService.sendNotification(sender, "Transação realizada com sucesso.");
+        this.notificationService.sendNotification(receiver, "Transação recebida com sucesso.");
         this.transactionRepository.save(transaction);
 
         return transaction;
+    }
+
+    public Transaction buildTransaction(BigDecimal amount, Usuario sender, Usuario receiver) {
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amount);
+        transaction.setSender(sender);
+        transaction.setReceiver(receiver);
+        transaction.setTimestamp(LocalDateTime.now());
+
+        return transaction;
+    }
+
+    public void rollbackTransaction(BigDecimal amount, Usuario sender, Usuario receiver) {
+        sender.setBalance(sender.getBalance().add(amount));
+        receiver.setBalance(receiver.getBalance().subtract(amount));
     }
 
     // Verificação da autorização da transação com base numa API interna

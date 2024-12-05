@@ -27,12 +27,12 @@ public class Transaction {
     @ManyToOne
     @NotNull
     @JoinColumn(name = "pagador_id")
-    private Usuario senderId;
+    private Usuario sender;
 
     @ManyToOne
     @NotNull
     @JoinColumn(name = "recebedor_id")
-    private Usuario receiverId;
+    private Usuario receiver;
 
     @NotNull
     @Column(name = "horario_transacao")
