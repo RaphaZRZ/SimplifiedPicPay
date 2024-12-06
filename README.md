@@ -25,7 +25,6 @@ Create a MOCK API or an internal API to authorize the transaction.<br>
 Create a MOCK API or an internal API to simulate sending an email. This API may be offline occasionally;<br>
 Use your imagination to simulate the logic of the result return of the APIs;<br>
 Transactions must be reversed in any case of inconsistency, and the money shall be returned to the user who sent it;<br>
-Users are only allowed to update their password;<br>
 This service must be RESTful.
 </p>
 
