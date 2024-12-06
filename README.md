@@ -1,6 +1,11 @@
 ﻿<h1>Simplified PicPay</h1>
 
 
+<h2>IMPORTANT</h2>
+Go to application.properties and replace <code>spring.datasource.password=abcd1234</code> with
+<code>spring.datasource.password=root</code>, or choose any user from your database.
+
+
 <h2>About the project</h2>
 <p>
 Simplified PicPay it is a simplified payment platform. In it, it is possible to make transactions between two users.

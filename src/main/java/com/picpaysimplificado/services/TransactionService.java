@@ -36,12 +36,10 @@ public class TransactionService {
 
         this.usuarioService.validateTransaction(sender, transactionData.amount());
 
-        // Verifica se a transação é autorizada
+        // Verifica se a transação é autorizada, caso seja, cria a transação
         boolean isAuthorized = this.authorizeTransaction();
         if (!isAuthorized)
             throw new UnauthorizedTransactionException();
-
-        // Criando transação
         Transaction transaction = buildTransaction(transactionData.amount(), sender, receiver);
 
         // Atualizando saldo dos usuários
