@@ -75,5 +75,7 @@ public class TransactionService {
     public void rollbackTransaction(BigDecimal amount, Usuario sender, Usuario receiver) {
         sender.setBalance(sender.getBalance().add(amount));
         receiver.setBalance(receiver.getBalance().subtract(amount));
+        this.usuarioService.saveUsuario(sender);
+        this.usuarioService.saveUsuario(receiver);
     }
 }
