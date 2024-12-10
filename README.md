@@ -1,4 +1,5 @@
 ﻿<h1>Simplified PicPay</h1>
+> Status: DEVELOPMENT ⚠️
 
 
 <h2>IMPORTANT</h2>
