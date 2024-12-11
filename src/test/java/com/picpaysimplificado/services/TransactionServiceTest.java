@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
+@DataJpaTest // Indica que é uma classe de testes
 @ExtendWith(MockitoExtension.class) // Integração com Mockito e JUnit 5, instancia os mocks
 class TransactionServiceTest {
     @Mock
@@ -37,12 +39,10 @@ class TransactionServiceTest {
     @InjectMocks
     private TransactionService transactionService;
 
+
     // Configuração de Usuários
-    private Usuario createUsuario(Long id,
-            String nome,
-            String sobrenome,
-            BigDecimal balance) {
-        return new Usuario(id, nome, sobrenome, "9999999990" + id, nome.toLowerCase() + "@gmail.com", "12345", balance, UsuarioType.COMMON);
+    private Usuario createUsuario(Long id, String nome, String sobrenome, BigDecimal balance) {
+        return new Usuario(id, nome, sobrenome, "9999999990" + id, nome.toLowerCase() + "@gmail.com", "123456", balance, UsuarioType.COMMON);
     }
 
     // Configuração de Mocks Padrão
@@ -126,8 +126,7 @@ class TransactionServiceTest {
 
         // Verificar se a transação foi salva
         verify(this.transactionRepository).save(argThat(transaction ->
-                transaction.getAmount().equals(new BigDecimal("10")) &&
-                        transaction.getSender().equals(sender) &&
+                transaction.getAmount().equals(new BigDecimal("10")) && transaction.getSender().equals(sender) &&
                         transaction.getReceiver().equals(receiver)));
     }
 }
