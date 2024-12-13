@@ -25,13 +25,19 @@ class UsuarioRepositoryTest {
     UsuarioRepository usuarioRepository;
 
 
+    // Salva o usuário no banco de dados temporário
+    private void saveUser(UsuarioDTO userData) throws Exception {
+        Usuario user = new Usuario(userData);
+        this.entityManager.persist(user);
+    }
+
     @Test
     @DisplayName("Must get User Successfully from DB.")
     void findUsuarioByDocumentSuccess() throws Exception {
         String document = "75292019735";
         UsuarioDTO userData = new UsuarioDTO("Magnus", "Petrikov", document, "magnus@gmail.com",
                 "magnusSenha", new BigDecimal("50.00"), UsuarioType.COMMON);
-        this.createUser(userData);
+        this.saveUser(userData);
 
         Optional<Usuario> result = this.usuarioRepository.findUsuarioByDocument(document);
 
@@ -43,10 +49,5 @@ class UsuarioRepositoryTest {
     void findUsuarioByDocumentFailedDocumentNotFound() {
         Optional<Usuario> result = this.usuarioRepository.findUsuarioByDocument("99999999999");
         assertThat(result.isEmpty()).isTrue();
-    }
-
-    private void createUser(UsuarioDTO userData) throws Exception {
-        Usuario user = new Usuario(userData);
-        this.entityManager.persist(user);
     }
 }

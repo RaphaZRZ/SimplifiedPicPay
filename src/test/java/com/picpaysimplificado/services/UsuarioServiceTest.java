@@ -1,10 +1,8 @@
 package com.picpaysimplificado.services;
 
+import com.picpaysimplificado.dtos.UpdatePasswordDTO;
 import com.picpaysimplificado.dtos.UsuarioDTO;
-import com.picpaysimplificado.exceptions.DocumentAlreadyExistsException;
-import com.picpaysimplificado.exceptions.EmailAlreadyExistsException;
-import com.picpaysimplificado.exceptions.InsufficientBalanceException;
-import com.picpaysimplificado.exceptions.MerchantTransactionNotAllowedException;
+import com.picpaysimplificado.exceptions.*;
 import com.picpaysimplificado.models.Usuario;
 import com.picpaysimplificado.models.UsuarioType;
 import com.picpaysimplificado.repositories.UsuarioRepository;
@@ -15,15 +13,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
-@DataJpaTest
 @ExtendWith(MockitoExtension.class)
 class UsuarioServiceTest {
     @Mock
@@ -36,6 +33,54 @@ class UsuarioServiceTest {
     // Configuração de Usuários
     private Usuario createUsuario(BigDecimal balance, UsuarioType type) {
         return new Usuario(1L, "Ana", "Clara", "99999999901", "ana@gmail.com", "123456", balance, type);
+    }
+
+    @Test
+    @DisplayName("Must throw UserNotFoundException if user not found by id.")
+    public void findUsuarioByIdFailedUserNotFound() {
+        // Jogando a exceçeção caso o usuário não seja encontrado
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            this.usuarioService.findUsuarioById(1L);
+        });
+    }
+
+    @Test
+    @DisplayName("Must find the user by id when everything is ok.")
+    public void findUsuarioByIdSuccess() throws Exception {
+        Usuario user = createUsuario(new BigDecimal("10"), UsuarioType.COMMON);
+
+        // Preparando retorno do método findById
+        when(this.usuarioRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        Usuario mockedUser = this.usuarioService.findUsuarioById(1L);
+
+        // Verificando se o usuário foi retornado corretamente
+        Assertions.assertEquals(user, mockedUser, "The user must match the mocked user.");
+        verify(this.usuarioRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    @DisplayName("Must throw UserNotFoundException if user not found by document.")
+    public void findUsuarioByDocumentFailedUserNotFound() {
+        // Jogando a exceçeção caso o usuário não seja encontrado
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            this.usuarioService.findUsuarioByDocument("99999999902");
+        });
+    }
+
+    @Test
+    @DisplayName("Must find the user by document when everything is ok.")
+    public void findUsuarioByDocumentSuccess() throws Exception {
+        Usuario user = createUsuario(new BigDecimal("10"), UsuarioType.COMMON);
+
+        // Preparando retorno do método findUsuarioByDocument
+        when(this.usuarioRepository.findUsuarioByDocument("99999999901")).thenReturn(Optional.of(user));
+
+        Usuario mockedUser = this.usuarioService.findUsuarioByDocument("99999999901");
+
+        // Verificando se o usuário foi retornado corretamente
+        Assertions.assertEquals(user, mockedUser, "The user must match the mocked user.");
+        verify(this.usuarioRepository, times(1)).findUsuarioByDocument("99999999901");
     }
 
     @Test
@@ -104,10 +149,47 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void updateUsuario() {
+    @DisplayName("Must throw UserNotFoundException exception when attempting to update a user that doesn't exist.")
+    void updateUsuarioFailedUserNotFound() {
+        // Jogando a exceção caso o usuário não exista
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            this.usuarioService.updateUsuario(new UpdatePasswordDTO("654321"), 99L);
+        });
     }
 
     @Test
-    void deleteUsuario() {
+    @DisplayName("Must update the user's password when everything is correct.")
+    void updateUsuarioSuccess() throws Exception {
+        Usuario user = createUsuario(new BigDecimal("10"), UsuarioType.COMMON);
+
+        // Preparando retorno dos método de validação
+        when(this.usuarioRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        this.usuarioService.updateUsuario(new UpdatePasswordDTO("654321"), 1L);
+
+        // Verificando se a senha foi alterada
+        verify(this.usuarioRepository, times(1)).save(argThat(Usuario ->
+                Usuario.getPassword().equals("654321")));
+    }
+
+    @Test
+    @DisplayName("Must throw UserNotFoundException exception when attempting to delete a user that doesn't exist.")
+    void deleteUsuarioFailedUserNotFound() {
+        // Jogando a exceção caso o usuário não exista
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            this.usuarioService.deleteUsuario(1L);
+        });
+    }
+
+    @Test
+    @DisplayName("Must delete the user when everything is correct.")
+    void deleteUsuarioSuccess() throws Exception {
+        // Preparando retorno dos método de validação
+        when(this.usuarioRepository.existsById(1L)).thenReturn(true);
+
+        this.usuarioService.deleteUsuario(1L);
+
+        // Verificando se o usuário foi alterada
+        verify(this.usuarioRepository, times(1)).deleteById(1L);
     }
 }

@@ -19,14 +19,6 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
 
-    public void validateTransaction(Usuario sender, BigDecimal amount) throws Exception {
-        if (sender.getUsuarioType() == UsuarioType.MERCHANT)
-            throw new MerchantTransactionNotAllowedException();
-
-        if (sender.getBalance().compareTo(amount) < 0)
-            throw new InsufficientBalanceException();
-    }
-
     public Usuario findUsuarioById(Long id) throws Exception {
         return this.usuarioRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
@@ -41,6 +33,14 @@ public class UsuarioService {
 
     public void saveUsuario(Usuario usuario) {
         this.usuarioRepository.save(usuario);
+    }
+
+    public void validateTransaction(Usuario sender, BigDecimal amount) throws Exception {
+        if (sender.getUsuarioType() == UsuarioType.MERCHANT)
+            throw new MerchantTransactionNotAllowedException();
+
+        if (sender.getBalance().compareTo(amount) < 0)
+            throw new InsufficientBalanceException();
     }
 
     @Transactional
