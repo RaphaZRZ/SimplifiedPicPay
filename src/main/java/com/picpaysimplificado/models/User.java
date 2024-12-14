@@ -1,7 +1,7 @@
 package com.picpaysimplificado.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.picpaysimplificado.dtos.UsuarioDTO;
+import com.picpaysimplificado.dtos.UserDTO;
 import com.picpaysimplificado.exceptions.InvalidCNPJException;
 import com.picpaysimplificado.exceptions.InvalidCPFException;
 import com.picpaysimplificado.serializers.DocumentSerializer;
@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(of = "id")
 @Entity(name = "usuarios")
 @Table(name = "usuarios")
-public class Usuario {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
@@ -60,21 +60,21 @@ public class Usuario {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
-    private UsuarioType usuarioType;
+    private UserType userType;
 
-    public Usuario(UsuarioDTO usuarioData) throws Exception {
-        if (usuarioData.usuarioType() == UsuarioType.MERCHANT && usuarioData.document().length() != 14)
+    public User(UserDTO userData) throws Exception {
+        if (userData.userType() == UserType.MERCHANT && userData.document().length() != 14)
             throw new InvalidCNPJException();
 
-        else if (usuarioData.usuarioType() == UsuarioType.COMMON && usuarioData.document().length() != 11)
+        else if (userData.userType() == UserType.COMMON && userData.document().length() != 11)
             throw new InvalidCPFException();
 
-        this.firstName = usuarioData.firstName();
-        this.lastName = usuarioData.lastName();
-        this.document = usuarioData.document();
-        this.email = usuarioData.email();
-        this.password = usuarioData.password();
-        this.balance = usuarioData.balance();
-        this.usuarioType = usuarioData.usuarioType();
+        this.firstName = userData.firstName();
+        this.lastName = userData.lastName();
+        this.document = userData.document();
+        this.email = userData.email();
+        this.password = userData.password();
+        this.balance = userData.balance();
+        this.userType = userData.userType();
     }
 }

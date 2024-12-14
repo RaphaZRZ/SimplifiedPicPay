@@ -4,7 +4,7 @@ import com.picpaysimplificado.exceptions.NotificationServiceOfflineException;
 import com.picpaysimplificado.exceptions.UnauthorizedTransactionException;
 import com.picpaysimplificado.models.Transaction;
 import com.picpaysimplificado.dtos.TransactionDTO;
-import com.picpaysimplificado.models.Usuario;
+import com.picpaysimplificado.models.User;
 import com.picpaysimplificado.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UserService userService;
 
     @Autowired
     private NotificationService notificationService;
@@ -28,10 +28,10 @@ public class TransactionService {
 
 
     public Transaction createTransaction(TransactionDTO transactionData) throws Exception {
-        Usuario sender = this.usuarioService.findUsuarioById(transactionData.senderId());
-        Usuario receiver = this.usuarioService.findUsuarioById(transactionData.receiverId());
+        User sender = this.userService.findUserById(transactionData.senderId());
+        User receiver = this.userService.findUserById(transactionData.receiverId());
 
-        this.usuarioService.validateTransaction(sender, transactionData.amount());
+        this.userService.validateTransaction(sender, transactionData.amount());
 
         // Verifica se a transação está autorizada, caso esteja, cria a transação
         boolean isAuthorized = this.authorizationService.transactionIsAuthorized();
@@ -44,8 +44,8 @@ public class TransactionService {
         receiver.setBalance(receiver.getBalance().add(transactionData.amount()));
 
         // Atualizando saldo dos usuários
-        this.usuarioService.saveUsuario(sender);
-        this.usuarioService.saveUsuario(receiver);
+        this.userService.saveUser(sender);
+        this.userService.saveUser(receiver);
 
         // Verificar se o sistema de notificação está online, reverter transação caso esteja offline
         boolean notifyUserIsOnline = this.notificationService.notifyUserIsOnline();
@@ -62,7 +62,7 @@ public class TransactionService {
         return transaction;
     }
 
-    public Transaction buildTransaction(BigDecimal amount, Usuario sender, Usuario receiver) {
+    public Transaction buildTransaction(BigDecimal amount, User sender, User receiver) {
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
         transaction.setSender(sender);
@@ -72,10 +72,10 @@ public class TransactionService {
         return transaction;
     }
 
-    public void rollbackTransaction(BigDecimal amount, Usuario sender, Usuario receiver) {
+    public void rollbackTransaction(BigDecimal amount, User sender, User receiver) {
         sender.setBalance(sender.getBalance().add(amount));
         receiver.setBalance(receiver.getBalance().subtract(amount));
-        this.usuarioService.saveUsuario(sender);
-        this.usuarioService.saveUsuario(receiver);
+        this.userService.saveUser(sender);
+        this.userService.saveUser(receiver);
     }
 }

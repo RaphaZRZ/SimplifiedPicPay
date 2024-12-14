@@ -1,6 +1,6 @@
 package com.picpaysimplificado.services;
 
-import com.picpaysimplificado.models.Usuario;
+import com.picpaysimplificado.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +25,8 @@ public class NotificationService {
     }
 
     // Simula um serviço de notificação fora do ar
-    public void sendNotification(Usuario usuario, String message) {
-        String email = usuario.getEmail();
+    public void sendNotification(User user, String message) {
+        String email = user.getEmail();
 
         System.out.println("Notificação enviada para o email " + email + " com sucesso.\n" + message);
     }

@@ -1,8 +1,8 @@
 package com.picpaysimplificado.repositories;
 
-import com.picpaysimplificado.dtos.UsuarioDTO;
-import com.picpaysimplificado.models.Usuario;
-import com.picpaysimplificado.models.UsuarioType;
+import com.picpaysimplificado.dtos.UserDTO;
+import com.picpaysimplificado.models.User;
+import com.picpaysimplificado.models.UserType;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,37 +17,37 @@ import java.util.Optional;
 
 @ActiveProfiles("test") // Alterar qual application.properties será usado
 @DataJpaTest // Indica que é uma classe de testes
-class UsuarioRepositoryTest {
+class UserRepositoryTest {
     @Autowired
     EntityManager entityManager;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    UserRepository userRepository;
 
 
     // Salva o usuário no banco de dados temporário
-    private void saveUser(UsuarioDTO userData) throws Exception {
-        Usuario user = new Usuario(userData);
+    private void saveUser(UserDTO userData) throws Exception {
+        User user = new User(userData);
         this.entityManager.persist(user);
     }
 
     @Test
     @DisplayName("Must get User Successfully from DB.")
-    void findUsuarioByDocumentSuccess() throws Exception {
+    void findUserByDocumentSuccess() throws Exception {
         String document = "75292019735";
-        UsuarioDTO userData = new UsuarioDTO("Magnus", "Petrikov", document, "magnus@gmail.com",
-                "magnusSenha", new BigDecimal("50.00"), UsuarioType.COMMON);
+        UserDTO userData = new UserDTO("Magnus", "Petrikov", document, "magnus@gmail.com",
+                "magnusSenha", new BigDecimal("50.00"), UserType.COMMON);
         this.saveUser(userData);
 
-        Optional<Usuario> result = this.usuarioRepository.findUsuarioByDocument(document);
+        Optional<User> result = this.userRepository.findUserByDocument(document);
 
         assertThat(result.isPresent()).isTrue();
     }
 
     @Test
     @DisplayName("Must not get User from DB when user not exists.")
-    void findUsuarioByDocumentFailedDocumentNotFound() {
-        Optional<Usuario> result = this.usuarioRepository.findUsuarioByDocument("99999999999");
+    void findUserByDocumentFailedDocumentNotFound() {
+        Optional<User> result = this.userRepository.findUserByDocument("99999999999");
         assertThat(result.isEmpty()).isTrue();
     }
 }

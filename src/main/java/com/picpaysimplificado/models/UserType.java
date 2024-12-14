@@ -1,6 +1,6 @@
 package com.picpaysimplificado.models;
 
-public enum UsuarioType {
+public enum UserType {
     COMMON,
     MERCHANT
 }

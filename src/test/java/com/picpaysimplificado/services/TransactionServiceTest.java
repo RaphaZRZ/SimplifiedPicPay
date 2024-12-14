@@ -3,8 +3,8 @@ package com.picpaysimplificado.services;
 import com.picpaysimplificado.dtos.TransactionDTO;
 import com.picpaysimplificado.exceptions.NotificationServiceOfflineException;
 import com.picpaysimplificado.exceptions.UnauthorizedTransactionException;
-import com.picpaysimplificado.models.Usuario;
-import com.picpaysimplificado.models.UsuarioType;
+import com.picpaysimplificado.models.User;
+import com.picpaysimplificado.models.UserType;
 import com.picpaysimplificado.repositories.TransactionRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ class TransactionServiceTest {
     private TransactionRepository transactionRepository;
 
     @Mock
-    private UsuarioService usuarioService;
+    private UserService userService;
 
     @Mock
     private NotificationService notificationService;
@@ -41,15 +41,15 @@ class TransactionServiceTest {
 
 
     // Configuração de Usuários
-    private Usuario createUsuario(Long id, String nome, String sobrenome, BigDecimal balance) {
-        return new Usuario(id, nome, sobrenome, "9999999990" + id, nome.toLowerCase() + "@gmail.com", "123456", balance, UsuarioType.COMMON);
+    private User createUsuario(Long id, String nome, String sobrenome, BigDecimal balance) {
+        return new User(id, nome, sobrenome, "9999999990" + id, nome.toLowerCase() + "@gmail.com", "123456", balance, UserType.COMMON);
     }
 
     // Configuração de Mocks Padrão
-    private void setupMockForUsuarios(Usuario sender,
-            Usuario receiver) throws Exception {
-        when(usuarioService.findUsuarioById(sender.getId())).thenReturn(sender);
-        when(usuarioService.findUsuarioById(receiver.getId())).thenReturn(receiver);
+    private void setupMockForUsuarios(User sender,
+            User receiver) throws Exception {
+        when(userService.findUserById(sender.getId())).thenReturn(sender);
+        when(userService.findUserById(receiver.getId())).thenReturn(receiver);
     }
 
 
@@ -57,8 +57,8 @@ class TransactionServiceTest {
     @DisplayName("Must throw UnauthorizedTransactionException when transaction is unauthorized.")
     public void createTransactionFailedUnauthorizedTransaction() throws Exception {
         // Criando usuários de teste
-        Usuario sender = createUsuario(1L, "Ana", "Clara", new BigDecimal("10"));
-        Usuario receiver = createUsuario(2L, "Bernardo", "Artheus", new BigDecimal("20"));
+        User sender = createUsuario(1L, "Ana", "Clara", new BigDecimal("10"));
+        User receiver = createUsuario(2L, "Bernardo", "Artheus", new BigDecimal("20"));
 
         // Definindo o que ocorrerá na chamada de cada método mockado na hora de testar o método principal
         setupMockForUsuarios(sender, receiver);
@@ -75,8 +75,8 @@ class TransactionServiceTest {
     @DisplayName("Must rollback transaction and throw NotificationServiceOfflineException when notification service is offline.")
     public void createTransactionFailedNotificationServiceIsOffline() throws Exception {
         // Criando usuários de teste
-        Usuario sender = createUsuario(1L, "Ana", "Clara", new BigDecimal("10"));
-        Usuario receiver = createUsuario(2L, "Bernardo", "Artheus", new BigDecimal("20"));
+        User sender = createUsuario(1L, "Ana", "Clara", new BigDecimal("10"));
+        User receiver = createUsuario(2L, "Bernardo", "Artheus", new BigDecimal("20"));
 
         // Definindo o que ocorrerá na chamada de cada método mockado na hora de testar o método principal
         setupMockForUsuarios(sender, receiver);
@@ -92,16 +92,16 @@ class TransactionServiceTest {
         // Verifica se o saldo foi modificado e devolvido após o estorno da transação
         Assertions.assertEquals(new BigDecimal("10"), sender.getBalance());
         Assertions.assertEquals(new BigDecimal("20"), receiver.getBalance());
-        verify(this.usuarioService, times(2)).saveUsuario(sender);
-        verify(this.usuarioService, times(2)).saveUsuario(receiver);
+        verify(this.userService, times(2)).saveUser(sender);
+        verify(this.userService, times(2)).saveUser(receiver);
     }
 
     @Test
     @DisplayName("Must create transaction in DB when everything is ok.")
     public void createTransactionSuccess() throws Exception {
         // Criando usuários de teste
-        Usuario sender = createUsuario(1L, "Ana", "Clara", new BigDecimal("10"));
-        Usuario receiver = createUsuario(2L, "Bernardo", "Artheus", new BigDecimal("20"));
+        User sender = createUsuario(1L, "Ana", "Clara", new BigDecimal("10"));
+        User receiver = createUsuario(2L, "Bernardo", "Artheus", new BigDecimal("20"));
 
         // Definindo o que ocorrerá na chamada de cada método mockado na hora de testar o método principal
         setupMockForUsuarios(sender, receiver);
@@ -117,8 +117,8 @@ class TransactionServiceTest {
         // Verificando se o saldo foi modificado e se os usuários foram salvos
         Assertions.assertEquals(new BigDecimal("0"), sender.getBalance());
         Assertions.assertEquals(new BigDecimal("30"), receiver.getBalance());
-        verify(this.usuarioService, times(1)).saveUsuario(sender);
-        verify(this.usuarioService, times(1)).saveUsuario(receiver);
+        verify(this.userService, times(1)).saveUser(sender);
+        verify(this.userService, times(1)).saveUser(receiver);
 
         // Verificar se a notificação foi enviada
         verify(this.notificationService, times(1)).sendNotification(sender, "Transação realizada com sucesso.");
