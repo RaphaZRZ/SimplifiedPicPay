@@ -39,8 +39,8 @@ This service must be RESTful.
         "document": "75292019735",<br>
         "email": "rapha@gmail.com",<br>
         "password": "raphaSenha",<br>
-        "balance": 50.00,<br>
-        "usuarioType": "COMMON"<br>
+        "balance": 90.00,<br>
+        "userType": "COMMON"<br>
     },<br><br>
     {
         "firstName": "Lucas",<br>
@@ -49,7 +49,7 @@ This service must be RESTful.
         "email": "lucas@gmail.com",<br>
         "password": "lucasSenha",<br>
         "balance": 310.00,<br>
-        "usuarioType": "COMMON"<br>
+        "userType": "COMMON"<br>
     },<br><br>
     {
         "firstName": "Felipe",<br>
@@ -57,8 +57,8 @@ This service must be RESTful.
         "document": "31295212332314",<br>
         "email": "felipe@gmail.com",<br>
         "password": "felipeSenha",<br>
-        "balance": 70.00,<br>
-        "usuarioType": "MERCHANT"<br>
+        "balance": 100.00,<br>
+        "userType": "MERCHANT"<br>
     }<br>
 ]
 </p>
