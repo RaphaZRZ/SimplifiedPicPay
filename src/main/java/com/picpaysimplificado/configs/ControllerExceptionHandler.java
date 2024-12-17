@@ -25,7 +25,7 @@ public class ControllerExceptionHandler {
     // Verificar dados inválidos
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ExceptionDTO> handleDeserialization(HttpMessageNotReadableException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO("Erro de deserialização. Dados inválidos enviados.", "400");
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Erro de deserialização. Os dados enviados são inválidos.", "400");
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
@@ -52,16 +52,16 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity handle404(EntityNotFoundException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO("Recurso não encontrado.", "404");
-        return ResponseEntity.status(404).body(exceptionDTO);
-    }
-
     // Verifica se há um controlador para a URL solicitada
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity handleControllerNotFoundException(NoHandlerFoundException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO("Controlador inexistente para esta URL.", "404");
+        return ResponseEntity.status(404).body(exceptionDTO);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity handle404(EntityNotFoundException exception) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Recurso não encontrado.", "404");
         return ResponseEntity.status(404).body(exceptionDTO);
     }
 
