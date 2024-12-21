@@ -12,6 +12,9 @@ async function getUserById() {
         const userData = await resp.json();
         const userRow = createRow(userData)
         addRow(userRow, "usersTable");
+    } else {
+        errorData = await resp.json();
+        console.log(`Error: ${errorData.message}\nStatus: ${errorData.statusCode}.`)
     }
 }
 
@@ -27,6 +30,9 @@ async function getUserByDocument() {
         const userData = await resp.json();
         const userRow = createRow(userData);
         addRow(userRow, "usersTable");
+    } else {
+        errorData = await resp.json();
+        console.log(`Error: ${errorData.message}\nStatus: ${errorData.statusCode}.`)
     }
 }
 
@@ -40,6 +46,9 @@ async function getAllUsers() {
             const userRow = createRow(user);
             addRow(userRow, "usersTable");
         });
+    } else {
+        errorData = await resp.json();
+        console.log(`Error: ${errorData.message}\nStatus: ${errorData.statusCode}.`)
     }
 }
 
