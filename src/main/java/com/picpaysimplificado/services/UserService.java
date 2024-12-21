@@ -50,7 +50,6 @@ public class UserService {
             throw new EmailAlreadyExistsException();
         if (this.userRepository.existsByDocument(userData.document()))
             throw new DocumentAlreadyExistsException();
-
         User user = new User(userData);
         saveUser(user);
         return user;

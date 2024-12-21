@@ -33,7 +33,36 @@
         </nav>
     </header>
 
-    <footer>
+    <main>
+        <!-- Find user by id -->
+        <label for="userIdInput">Find User By ID:</label>
+        <input id="userIdInput" type="text" placeholder="Type user ID...">
+        <button onclick="getUserById()">Search</button>
+        <br>
 
-    </footer>
+        <!-- Find user by document -->
+        <label for="userDocumentInput">Find User By Document:</label>
+        <input id="userDocumentInput" type="text" placeholder="Type user document...">
+        <button onclick="getUserByDocument()">Search</button>
+        <br>
+
+        <!-- Find all users -->
+        <button onclick="getAllUsers()">Find All</button>
+        <hr>
+
+        <table id="usersTable">
+            <tr>
+                <th>Id</th>
+                <th>First-Name</th>
+                <th>Last-Name</th>
+                <th>Document</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Balance</th>
+                <th>User-Type</th>
+            </tr>
+        </table>
+    </main>
+
+    <script src="scripts/findUser.js"></script>
 </body>
