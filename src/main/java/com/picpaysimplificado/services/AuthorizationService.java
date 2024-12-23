@@ -9,17 +9,17 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class AuthorizationService {
     @Autowired
-    private RestTemplate restTemplate; // Fazer requisições HTTP entre serviços
+    private RestTemplate restTemplate; // Perform HTTP requests between services
 
 
-    // Verificação da autorização da transação com base numa API interna
+    // Verify transaction authorization based on an internal API
     public boolean transactionIsAuthorized() {
         String internalApiURL = "http://localhost:8080/authorize-transaction-api";
 
         ResponseEntity<Boolean> authorizationResponse = this.restTemplate.getForEntity(internalApiURL, Boolean.class);
 
-        if (authorizationResponse.getStatusCode() == HttpStatus.OK) // Se a API funcionar corretamente
+        if (authorizationResponse.getStatusCode() == HttpStatus.OK) // If the API works correctly
             return authorizationResponse.getBody();
-        return false; // Retorna falso se ocorrer algum erro
+        return false;
     }
 }

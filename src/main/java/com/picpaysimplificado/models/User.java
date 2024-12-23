@@ -41,7 +41,7 @@ public class User {
     private String document;
 
     @NotNull
-    @Email(message = "email inválido.")
+    @Email(message = "Invalid email.")
     @Column(name = "Email", unique = true)
     private String email;
 

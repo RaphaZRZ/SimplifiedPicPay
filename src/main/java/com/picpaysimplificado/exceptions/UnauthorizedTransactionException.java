@@ -7,7 +7,7 @@ public class UnauthorizedTransactionException extends Exception {
     private final int statusCode;
 
     public UnauthorizedTransactionException() {
-        super("Transação não autorizada.");
+        super("Unauthorized transaction.");
         this.statusCode = 403;
     }
 }

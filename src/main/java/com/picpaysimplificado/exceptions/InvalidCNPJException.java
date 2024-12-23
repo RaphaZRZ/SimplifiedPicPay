@@ -7,7 +7,7 @@ public class InvalidCNPJException extends Exception {
     private final int statusCode;
 
     public InvalidCNPJException() {
-        super("CNPJ inválido.");
+        super("Invalid CNPJ.");
         this.statusCode = 400;
     }
 }

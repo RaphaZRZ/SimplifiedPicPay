@@ -71,7 +71,7 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long id) throws Exception {
-        // Poderia utilizar o método findUsuarioById, porém traria um retorno de um objeto Usuário desnecessário
+        // Could use the findUsuarioById method, but it would return an unnecessary object
         if (!this.userRepository.existsById(id))
             throw new UserNotFoundException();
 

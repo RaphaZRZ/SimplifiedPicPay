@@ -14,115 +14,115 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-@RestControllerAdvice // Inicializa a classe na inicialização do Spring Boot
+@RestControllerAdvice // Initialize the class during Spring Boot initialization
 public class ControllerExceptionHandler {
-    // CPF inválido
+    // Invalid CPF
     @ExceptionHandler(InvalidCPFException.class)
     public ResponseEntity<ExceptionDTO> handleInvalidCPFException(InvalidCPFException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // CNPJ inválido
+    // Invalid CNPJ
     @ExceptionHandler(InvalidCNPJException.class)
     public ResponseEntity<ExceptionDTO> handleInvalidCNPJException(InvalidCNPJException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // Documento já cadastrado
+    // Document already registered
     @ExceptionHandler(DocumentAlreadyExistsException.class)
     public ResponseEntity<ExceptionDTO> handleDocumentAlreadyExistsException(DocumentAlreadyExistsException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // Email já cadastrado
+    // Email already registered
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ExceptionDTO> handleEmailAlreadyExistsException(EmailAlreadyExistsException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // Usuário já cadastrado
+    // User already registered
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ExceptionDTO> handleDuplicateEntry(DataIntegrityViolationException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO("Usuário já cadastrado.", 400);
+        ExceptionDTO exceptionDTO = new ExceptionDTO("User already registered.", 400);
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // Saldo insuficiente
+    // Insufficient balance
     @ExceptionHandler(InsufficientBalanceException.class)
     public ResponseEntity<ExceptionDTO> handleInsufficientBalanceException(InsufficientBalanceException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // Dados inválidos
+    // Invalid data
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ExceptionDTO> handleDeserialization(HttpMessageNotReadableException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO("Erro de deserialização. Os dados enviados são inválidos.", 400);
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Deserialization error. Invalid data.", 400);
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // Validar anotações BEAN na hora de salvar ou alterar dados no banco de dados
+    // Validate BEAN annotations during save or update of data in the database
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionDTO> handleValidationException(ConstraintViolationException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO("Erro na validação: " + exception.getMessage(), 400);
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Validation error: " + exception.getMessage(), 400);
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // Validar anotações BEAN quando um objeto é inválido como argumento de um end-point
+    // Validate BEAN annotations when an object is invalid as an argument of an endpoint
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionDTO> handleBeanValidationException(MethodArgumentNotValidException exception) {
-        String errorMessage = exception.getBindingResult().getAllErrors().stream().findFirst().map(ObjectError::getDefaultMessage).orElse("Erro de validação.");
+        String errorMessage = exception.getBindingResult().getAllErrors().stream().findFirst().map(ObjectError::getDefaultMessage).orElse("Validation error.");
         ExceptionDTO exceptionDTO = new ExceptionDTO(errorMessage, 400);
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // Tipo do parâmetro passados na URL da requisição inválido
+    // Invalid parameter type in the URL of the request
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ExceptionDTO> handleTypeMismatch(MethodArgumentTypeMismatchException exception) {
-        String message = String.format("Entrada inválida: O parâmetro '%s' fornecido é de um tipo inválido.", exception.getName());
+        String message = String.format("Invalid entry: The parameter '%s' provided is of an invalid type.", exception.getName());
         ExceptionDTO exceptionDTO = new ExceptionDTO(message, 400);
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // Transação de lojista não autorizada
+    // Merchant transaction not allowed
     @ExceptionHandler(MerchantTransactionNotAllowedException.class)
     public ResponseEntity<ExceptionDTO> handleMerchantTransactionNotAllowedException(MerchantTransactionNotAllowedException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
         return ResponseEntity.status(403).body(exceptionDTO);
     }
 
-    // Transação não autorizada
+    // Unauthorized transaction
     @ExceptionHandler(UnauthorizedTransactionException.class)
     public ResponseEntity<ExceptionDTO> handleUnauthorizedTransactionException(UnauthorizedTransactionException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
         return ResponseEntity.status(403).body(exceptionDTO);
     }
 
-    // Usuário já existe
+    // User not found
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ExceptionDTO> handleUserNotFoundException(UserNotFoundException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
         return ResponseEntity.status(404).body(exceptionDTO);
     }
 
-    // Controlador para classe não encontrado
+    // Class controller not found
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ExceptionDTO> handleControllerNotFoundException(NoHandlerFoundException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO("Controlador inexistente para esta URL.", 404);
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Non-existent controller for this URL", 404);
         return ResponseEntity.status(404).body(exceptionDTO);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionDTO> handle404(EntityNotFoundException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO("Recurso não encontrado.", 404);
+        ExceptionDTO exceptionDTO = new ExceptionDTO("Resource not found.", 404);
         return ResponseEntity.status(404).body(exceptionDTO);
     }
 
-    // Serviço de notificações fora do ar
+    // Notification service is offline
     @ExceptionHandler(NotificationServiceOfflineException.class)
     public ResponseEntity<ExceptionDTO> handleNotificationServiceOfflineException(NotificationServiceOfflineException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());

@@ -7,7 +7,7 @@ public class EmailAlreadyExistsException extends Exception {
     private final int statusCode;
 
     public EmailAlreadyExistsException() {
-        super("Email já cadastrado.");
+        super("Email already registered.");
         this.statusCode = 400;
     }
 }

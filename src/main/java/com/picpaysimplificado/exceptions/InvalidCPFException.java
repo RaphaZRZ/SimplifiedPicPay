@@ -7,7 +7,7 @@ public class InvalidCPFException extends Exception {
     private final int statusCode;
 
     public InvalidCPFException() {
-        super("CPF inválido.");
+        super("Invalid CPF.");
         this.statusCode = 400;
     }
 }

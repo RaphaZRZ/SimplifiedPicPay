@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class authorizeTransactionAPI {
     @GetMapping
     public ResponseEntity<Boolean> authorize() {
-        // simula a lógica do consumo de uma API
-        boolean isAuthorized = Math.random() > 0.3; // 70% de chance de retornar autorizado
+        // Simulate the logic of consuming an API
+        boolean isAuthorized = Math.random() > 0.3; // 70% chance to return authorized
 
         return ResponseEntity.ok(isAuthorized);
     }

@@ -10,24 +10,24 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class NotificationService {
     @Autowired
-    private RestTemplate restTemplate; // Fazer requisições HTTP entre serviços
+    private RestTemplate restTemplate; // Perform HTTP requests between services
 
 
-    // Verifica se o serviço de envio de emails está online
+    // Verify if the email sending service is online
     public boolean notifyUserIsOnline() {
         String internalApiURL = "http://localhost:8080/notify-user-api";
 
         ResponseEntity<Boolean> notifyResponse = this.restTemplate.getForEntity(internalApiURL, boolean.class);
 
-        if (notifyResponse.getStatusCode() == HttpStatus.OK) // Se a API funcionar corretamente
+        if (notifyResponse.getStatusCode() == HttpStatus.OK) // If the API works correctly
             return notifyResponse.getBody();
         return false;
     }
 
-    // Simula um serviço de notificação fora do ar
+    // Simulate the notification service being offline
     public void sendNotification(User user, String message) {
         String email = user.getEmail();
 
-        System.out.println("Notificação enviada para o email " + email + " com sucesso.\n" + message);
+        System.out.println("Notification sent to email " + email + " successfully.\n" + message);
     }
 }

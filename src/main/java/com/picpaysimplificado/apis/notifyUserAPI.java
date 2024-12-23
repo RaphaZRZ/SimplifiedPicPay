@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class notifyUserAPI {
     @GetMapping
     public ResponseEntity<Boolean> notificationSended() {
-        // simula a lógica do consumo de uma API
-        boolean isSent = Math.random() > 0.2; // 80% de chance de ser notificado
+        // Simulate the logic of consuming an API
+        boolean isSent = Math.random() > 0.2; // 80% to notify
 
         return ResponseEntity.ok(isSent);
     }

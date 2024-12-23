@@ -7,7 +7,7 @@ public class UserNotFoundException extends Exception {
     private final int statusCode;
 
     public UserNotFoundException() {
-        super("Usuário não encontrado.");
+        super("User not found.");
         this.statusCode = 404;
     }
 }

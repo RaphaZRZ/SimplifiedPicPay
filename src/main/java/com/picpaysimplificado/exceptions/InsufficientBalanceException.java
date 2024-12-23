@@ -7,7 +7,7 @@ public class InsufficientBalanceException extends Exception {
     private final int statusCode;
 
     public InsufficientBalanceException() {
-        super("Saldo insuficiente.");
+        super("Insufficient balance.");
         this.statusCode = 400;
     }
 }

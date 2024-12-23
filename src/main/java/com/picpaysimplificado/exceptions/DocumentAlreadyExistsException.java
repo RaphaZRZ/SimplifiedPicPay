@@ -7,7 +7,7 @@ public class DocumentAlreadyExistsException extends Exception {
     private final int statusCode;
 
     public DocumentAlreadyExistsException() {
-        super("Documento já cadastrado.");
+        super("Document already registered.");
         this.statusCode = 400;
     }
 }

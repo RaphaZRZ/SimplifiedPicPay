@@ -7,7 +7,7 @@ public class MerchantTransactionNotAllowedException extends Exception {
     private final int statusCode;
 
     public MerchantTransactionNotAllowedException() {
-        super("Usuário do tipo lojista não está autorizado a realizar transação.");
+        super("Merchant users are not allowed to perform transactions.");
         this.statusCode = 403;
     }
 }
