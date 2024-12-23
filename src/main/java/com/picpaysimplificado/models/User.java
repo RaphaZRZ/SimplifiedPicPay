@@ -2,8 +2,6 @@ package com.picpaysimplificado.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.picpaysimplificado.dtos.UserDTO;
-import com.picpaysimplificado.exceptions.InvalidCNPJException;
-import com.picpaysimplificado.exceptions.InvalidCPFException;
 import com.picpaysimplificado.serializers.DocumentSerializer;
 import com.picpaysimplificado.serializers.PasswordSerializer;
 import jakarta.persistence.*;
@@ -28,12 +26,12 @@ public class User {
     private Long id;
 
     @NotNull
-    @Size(min = 3, max = 20, message = "O nome deve conter de 3 a 20 caracteres.")
+    @Size(min = 3, max = 20, message = "The first name must be between 3 and 20 characters long.")
     @Column(name = "nome")
     private String firstName;
 
     @NotNull
-    @Size(min = 3, max = 20, message = "O sobrenome deve conter de 3 a 20 caracteres.")
+    @Size(min = 3, max = 20, message = "The last name must be between 3 and 20 characters long.")
     @Column(name = "sobrenome")
     private String lastName;
 
@@ -48,7 +46,7 @@ public class User {
     private String email;
 
     @NotNull
-    @Size(min = 6, max = 60, message = "A senha deve conter de 6 a 60 caracteres.")
+    @Size(min = 6, max = 60, message = "The password must be between 6 and 60 characters long.")
     @JsonSerialize(using = PasswordSerializer.class)
     @Column(name = "senha")
     private String password;
@@ -63,12 +61,6 @@ public class User {
     private UserType userType;
 
     public User(UserDTO userData) throws Exception {
-        if (userData.userType() == UserType.MERCHANT && userData.document().length() != 14)
-            throw new InvalidCNPJException();
-
-        else if (userData.userType() == UserType.COMMON && userData.document().length() != 11)
-            throw new InvalidCPFException();
-
         this.firstName = userData.firstName();
         this.lastName = userData.lastName();
         this.document = userData.document();

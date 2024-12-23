@@ -45,11 +45,17 @@ public class UserService {
 
     @Transactional
     public User createUser(UserDTO userData) throws Exception {
-        // Verifica se as informações únicas já estão cadastradas no banco de dados
+        // Verify if the unique information has already been registered in the database
         if (this.userRepository.existsByEmail(userData.email()))
             throw new EmailAlreadyExistsException();
         if (this.userRepository.existsByDocument(userData.document()))
             throw new DocumentAlreadyExistsException();
+
+        // Verify if the document format is valid
+        if (userData.userType() == UserType.MERCHANT && userData.document().length() != 14)
+            throw new InvalidCNPJException();
+        else if (userData.userType() == UserType.COMMON && userData.document().length() != 11)
+            throw new InvalidCPFException();
 
         User user = new User(userData);
         saveUser(user);
