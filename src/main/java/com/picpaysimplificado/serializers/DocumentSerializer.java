@@ -17,6 +17,6 @@ public class DocumentSerializer extends JsonSerializer<String> {
             maskedDocument = document.substring(0, 2) + ".***.***/" + document.substring(8, 12) + "-" + document.substring(12, 14);
 
 
-        gen.writeString(maskedDocument); // substituir o documento ao fazer requisições GET
+        gen.writeString(maskedDocument); // Replace the document when making a GET request
     }
 }

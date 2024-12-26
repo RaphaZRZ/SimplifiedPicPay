@@ -39,7 +39,7 @@ public class UserController {
         return new ResponseEntity<>(objs, HttpStatus.OK);
     }
 
-    // Valida do DTO antes de qualquer processamento ou interação com o banco de dados.
+    // Validate the DTO before any processing or interaction with the database
     @Validated
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userData) throws Exception {

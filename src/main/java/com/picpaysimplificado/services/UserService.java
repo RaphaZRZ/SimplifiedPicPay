@@ -50,6 +50,13 @@ public class UserService {
             throw new EmailAlreadyExistsException();
         if (this.userRepository.existsByDocument(userData.document()))
             throw new DocumentAlreadyExistsException();
+
+        // Verify if the document format is valid
+        if (userData.userType() == UserType.MERCHANT && userData.document().length() != 14)
+            throw new InvalidCNPJException();
+        else if (userData.userType() == UserType.COMMON && userData.document().length() != 11)
+            throw new InvalidCPFException();
+
         User user = new User(userData);
         saveUser(user);
         return user;

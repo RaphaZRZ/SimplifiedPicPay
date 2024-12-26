@@ -7,7 +7,7 @@ public class NotificationServiceOfflineException extends Exception {
     private final int statusCode;
 
     public NotificationServiceOfflineException() {
-        super("Serviço de notificação está fora do ar. A transação será revertida.");
+        super("Notification service is offline. The transaction will be rolled back.");
         statusCode = 500;
     }
 }

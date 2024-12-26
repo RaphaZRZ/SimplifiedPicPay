@@ -33,30 +33,28 @@ public class TransactionService {
 
         this.userService.validateTransaction(sender, transactionData.amount());
 
-        // Verifica se a transação está autorizada, caso esteja, cria a transação
+        // Verify if the transaction is authorized
         boolean isAuthorized = this.authorizationService.transactionIsAuthorized();
         if (!isAuthorized)
             throw new UnauthorizedTransactionException();
         Transaction transaction = buildTransaction(transactionData.amount(), sender, receiver);
 
-        // Atualizando saldo dos usuários
+        // Update users' balances
         sender.setBalance(sender.getBalance().subtract(transactionData.amount()));
         receiver.setBalance(receiver.getBalance().add(transactionData.amount()));
-
-        // Atualizando saldo dos usuários
         this.userService.saveUser(sender);
         this.userService.saveUser(receiver);
 
-        // Verificar se o sistema de notificação está online, reverter transação caso esteja offline
+        // Verify if the notification system is online, if not, reverse the transaction
         boolean notifyUserIsOnline = this.notificationService.notifyUserIsOnline();
         if (!notifyUserIsOnline) {
             rollbackTransaction(transactionData.amount(), sender, receiver);
             throw new NotificationServiceOfflineException();
         }
 
-        // Notifica os usuários e salva a transação
-        this.notificationService.sendNotification(sender, "Transação realizada com sucesso.");
-        this.notificationService.sendNotification(receiver, "Transação recebida com sucesso.");
+        // Notify users and save the transaction
+        this.notificationService.sendNotification(sender, "Transaction completed successfully.");
+        this.notificationService.sendNotification(receiver, "Transaction received successfully.");
         this.transactionRepository.save(transaction);
 
         return transaction;
