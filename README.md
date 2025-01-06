@@ -9,7 +9,7 @@ Go to application.properties and replace <code>spring.datasource.password=abcd12
 
 <h2>About the project</h2>
 <p>
-Simplified PicPay it is a simplified payment platform. In it, it is possible to make transactions between two users.
+Simplified PicPay is a simplified payment platform. In it, it is possible to make transactions between two users.
 We have two types of users: common users and merchants, both have wallets with money and can realize transactions.
 </p>
 
