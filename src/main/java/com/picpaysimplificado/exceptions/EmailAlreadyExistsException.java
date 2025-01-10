@@ -8,6 +8,6 @@ public class EmailAlreadyExistsException extends Exception {
 
     public EmailAlreadyExistsException() {
         super("Email already registered.");
-        this.statusCode = 400;
+        this.statusCode = 409;
     }
 }

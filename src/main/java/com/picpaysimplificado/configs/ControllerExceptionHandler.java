@@ -30,27 +30,6 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
-    // Document already registered
-    @ExceptionHandler(DocumentAlreadyExistsException.class)
-    public ResponseEntity<ExceptionDTO> handleDocumentAlreadyExistsException(DocumentAlreadyExistsException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.badRequest().body(exceptionDTO);
-    }
-
-    // Email already registered
-    @ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<ExceptionDTO> handleEmailAlreadyExistsException(EmailAlreadyExistsException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.badRequest().body(exceptionDTO);
-    }
-
-    // User already registered
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ExceptionDTO> handleDuplicateEntry(DataIntegrityViolationException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO("User already registered.", 400);
-        return ResponseEntity.badRequest().body(exceptionDTO);
-    }
-
     // Insufficient balance
     @ExceptionHandler(InsufficientBalanceException.class)
     public ResponseEntity<ExceptionDTO> handleInsufficientBalanceException(InsufficientBalanceException exception) {
@@ -120,6 +99,27 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ExceptionDTO> handle404(EntityNotFoundException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO("Resource not found.", 404);
         return ResponseEntity.status(404).body(exceptionDTO);
+    }
+
+    // Document already registered
+    @ExceptionHandler(DocumentAlreadyExistsException.class)
+    public ResponseEntity<ExceptionDTO> handleDocumentAlreadyExistsException(DocumentAlreadyExistsException exception) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
+        return ResponseEntity.badRequest().body(exceptionDTO);
+    }
+
+    // Email already registered
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ExceptionDTO> handleEmailAlreadyExistsException(EmailAlreadyExistsException exception) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
+        return ResponseEntity.badRequest().body(exceptionDTO);
+    }
+
+    // User already registered
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ExceptionDTO> handleDuplicateEntry(DataIntegrityViolationException exception) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO("User already registered.", 409);
+        return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
     // Notification service is offline

@@ -8,6 +8,6 @@ public class DocumentAlreadyExistsException extends Exception {
 
     public DocumentAlreadyExistsException() {
         super("Document already registered.");
-        this.statusCode = 400;
+        this.statusCode = 409;
     }
 }
