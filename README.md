@@ -3,9 +3,13 @@
 
 
 <h2>IMPORTANT</h2>
-Go to application.properties and replace <code>spring.datasource.password=abcd1234</code> with
-<code>spring.datasource.password=root</code>, or choose any user from your database.
-
+<p>
+Go to application.properties and make sure that <code>spring.datasource.username=root</code> and
+<code>spring.datasource.password=root</code> are the correct username and password for your database.<br>
+This project uses swagger documentation, to access it, open your browser and go
+to: http://localhost:8080/swagger-ui/index.html while the application is running. Make sure you're using the correct
+port, in this case it is "8080";
+</p>
 
 <h2>About the project</h2>
 <p>
@@ -58,6 +62,15 @@ This service must be RESTful.
         "email": "felipe@gmail.com",<br>
         "password": "felipeSenha",<br>
         "balance": 100.00,<br>
+        "userType": "MERCHANT"<br>
+    },<br>
+    {
+        "firstName": "Carlos",<br>
+        "lastName": "Oliveira",<br>
+        "document": "72682217902162",<br>
+        "email": "carlos@gmail.com",<br>
+        "password": "carlosSenha",<br>
+        "balance": 175.00,<br>
         "userType": "MERCHANT"<br>
     }<br>
 ]
