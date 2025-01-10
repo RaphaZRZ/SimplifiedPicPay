@@ -63,7 +63,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ExceptionDTO> handleTypeMismatch(MethodArgumentTypeMismatchException exception) {
         String message = String.format("Invalid entry: The parameter '%s' provided is of an invalid type.", exception.getName());
-        ExceptionDTO exceptionDTO = new ExceptionDTO(message, 400);
+        ExceptionDTO exceptionDTO = new ExceptionDTO(message, 404);
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 

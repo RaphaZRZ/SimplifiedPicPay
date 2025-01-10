@@ -3,6 +3,9 @@ package com.picpaysimplificado.controllers;
 import com.picpaysimplificado.dtos.TransactionDTO;
 import com.picpaysimplificado.models.Transaction;
 import com.picpaysimplificado.services.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,12 @@ public class TransactionController {
     @Autowired
     TransactionService transactionService;
 
+    @Operation(description = "Create a transaction")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Transaction created successfully."),
+            @ApiResponse(responseCode = "403", description = "Unauthorized transaction."),
+            @ApiResponse(responseCode = "500", description = "Notification service is offline.")
+    })
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody TransactionDTO transactionData) throws Exception {
         Transaction transaction = this.transactionService.createTransaction(transactionData);
