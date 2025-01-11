@@ -1,5 +1,5 @@
 ﻿<h1>Simplified PicPay</h1>
-> Status: DEVELOPMENT ⚠️
+> Status: DEVELOPMENT(front-end side) ⚠️
 
 
 <h2>IMPORTANT</h2>
@@ -7,8 +7,8 @@
 Go to application.properties and make sure that <code>spring.datasource.username=root</code> and
 <code>spring.datasource.password=root</code> are the correct username and password for your database.<br>
 This project uses swagger documentation, to access it, open your browser and go
-to: <a href="http://localhost:8080/swagger-ui/index.html">http://localhost:8080/swagger-ui/index.html</a> while the application is running. Make sure you're using the correct
-port, in this case it is "8080";
+to: <a href="http://localhost:8080/swagger-ui/index.html">http://localhost:8080/swagger-ui/index.html</a> 
+while the application is running. Make sure you're using the correct port, in this case it is "8080";
 </p>
 
 <h2>About the project</h2>

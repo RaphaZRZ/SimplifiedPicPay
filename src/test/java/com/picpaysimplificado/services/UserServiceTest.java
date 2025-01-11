@@ -74,13 +74,13 @@ class UserServiceTest {
         User user = createUser(new BigDecimal("10"), UserType.COMMON);
 
         // Preparando retorno do método findUsuarioByDocument
-        when(this.userRepository.findUserByDocument("99999999901")).thenReturn(Optional.of(user));
+        when(this.userRepository.findByDocument("99999999901")).thenReturn(Optional.of(user));
 
         User mockedUser = this.userService.findUserByDocument("99999999901");
 
         // Verificando se o usuário foi retornado corretamente
         Assertions.assertEquals(user, mockedUser, "The user must match the mocked user.");
-        verify(this.userRepository, times(1)).findUserByDocument("99999999901");
+        verify(this.userRepository, times(1)).findByDocument("99999999901");
     }
 
     @Test
@@ -150,22 +150,22 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Must throw UserNotFoundException exception when attempting to update a user that doesn't exist.")
-    void updateUserFailedUserNotFound() {
+    void updateUserByIdFailedNotFound() {
         // Jogando a exceção caso o usuário não exista
         Assertions.assertThrows(UserNotFoundException.class, () -> {
-            this.userService.updateUser(new UpdatePasswordDTO("654321"), 99L);
+            this.userService.updateUserById(new UpdatePasswordDTO("654321"), 99L);
         });
     }
 
     @Test
     @DisplayName("Must update the user's password when everything is correct.")
-    void updateUserSuccess() throws Exception {
+    void updateUserByIdSuccess() throws Exception {
         User user = createUser(new BigDecimal("10"), UserType.COMMON);
 
         // Preparando retorno dos método de validação
         when(this.userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        this.userService.updateUser(new UpdatePasswordDTO("654321"), 1L);
+        this.userService.updateUserById(new UpdatePasswordDTO("654321"), 1L);
 
         // Verificando se a senha foi alterada
         verify(this.userRepository, times(1)).save(argThat(Usuario ->
@@ -174,20 +174,20 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Must throw UserNotFoundException exception when attempting to delete a user that doesn't exist.")
-    void deleteUserFailedUserNotFound() {
+    void deleteUserByIdFailedIdNotFound() {
         // Jogando a exceção caso o usuário não exista
         Assertions.assertThrows(UserNotFoundException.class, () -> {
-            this.userService.deleteUser(1L);
+            this.userService.deleteUserById(1L);
         });
     }
 
     @Test
     @DisplayName("Must delete the user when everything is correct.")
-    void deleteUserSuccess() throws Exception {
+    void deleteUserByIdSuccess() throws Exception {
         // Preparando retorno dos método de validação
         when(this.userRepository.existsById(1L)).thenReturn(true);
 
-        this.userService.deleteUser(1L);
+        this.userService.deleteUserById(1L);
 
         // Verificando se o usuário foi alterada
         verify(this.userRepository, times(1)).deleteById(1L);

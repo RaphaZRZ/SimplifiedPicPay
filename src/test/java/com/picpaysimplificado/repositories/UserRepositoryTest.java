@@ -15,8 +15,8 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 
-@ActiveProfiles("test") // Alterar qual application.properties será usado
-@DataJpaTest // Indica que é uma classe de testes
+@ActiveProfiles("test") // Select which application.properties file will be used
+@DataJpaTest
 class UserRepositoryTest {
     @Autowired
     EntityManager entityManager;
@@ -25,7 +25,7 @@ class UserRepositoryTest {
     UserRepository userRepository;
 
 
-    // Salva o usuário no banco de dados temporário
+    // Save the user in the in-memory database
     private void saveUser(UserDTO userData) throws Exception {
         User user = new User(userData);
         this.entityManager.persist(user);
@@ -36,7 +36,7 @@ class UserRepositoryTest {
     void findByDocumentSuccess() throws Exception {
         String document = "75292019735";
         UserDTO userData = new UserDTO("Magnus", "Petrikov", document, "magnus@gmail.com",
-                "magnusSenha", new BigDecimal("50.00"), UserType.COMMON);
+                "magnusPassword", new BigDecimal("50.00"), UserType.COMMON);
         this.saveUser(userData);
 
         Optional<User> result = this.userRepository.findByDocument(document);
