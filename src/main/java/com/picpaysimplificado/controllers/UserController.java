@@ -39,7 +39,7 @@ public class UserController {
 
     @Operation(description = "Find a user by document.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Return the user."),
+            @ApiResponse(responseCode = "200", description = "Returns the user."),
             @ApiResponse(responseCode = "400", description = "Invalid format for document."),
             @ApiResponse(responseCode = "404", description = "The document doesn't belong to any user.")
     })
@@ -58,7 +58,7 @@ public class UserController {
 
     @Operation(description = "Create a user.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User created successfully."),
+            @ApiResponse(responseCode = "201", description = "User created successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid data to create a user."),
             @ApiResponse(responseCode = "409", description = "Document or Email already registered.")
     })
@@ -71,7 +71,7 @@ public class UserController {
 
     @Operation(description = "Change the user's password by ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User's password changed successfully."),
+            @ApiResponse(responseCode = "204", description = "User's password changed successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid password."),
             @ApiResponse(responseCode = "404", description = "The ID doesn't belong to any user.")
     })
@@ -84,7 +84,7 @@ public class UserController {
 
     @Operation(description = "Delete a user by ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User deleted successfully."),
+            @ApiResponse(responseCode = "204", description = "User deleted successfully."),
             @ApiResponse(responseCode = "404", description = "The ID doesn't belong to any user.")
     })
     @DeleteMapping("/id/{id}")

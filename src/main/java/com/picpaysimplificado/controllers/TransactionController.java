@@ -23,13 +23,14 @@ public class TransactionController {
 
     @Operation(description = "Create a transaction")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Transaction created successfully."),
+            @ApiResponse(responseCode = "201", description = "Transaction created successfully."),
+            @ApiResponse(responseCode = "400", description = "Insufficient balance."),
             @ApiResponse(responseCode = "403", description = "Unauthorized transaction."),
             @ApiResponse(responseCode = "500", description = "Notification service is offline.")
     })
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody TransactionDTO transactionData) throws Exception {
         Transaction transaction = this.transactionService.createTransaction(transactionData);
-        return new ResponseEntity<>(transaction, HttpStatus.OK);
+        return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
 }
