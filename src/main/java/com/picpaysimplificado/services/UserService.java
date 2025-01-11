@@ -24,7 +24,7 @@ public class UserService {
     }
 
     public User findUserByDocument(String document) throws Exception {
-        return this.userRepository.findUserByDocument(document).orElseThrow(UserNotFoundException::new);
+        return this.userRepository.findByDocument(document).orElseThrow(UserNotFoundException::new);
     }
 
     public List<User> findAllUsers() {
@@ -63,10 +63,17 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(UpdatePasswordDTO passwordData, Long id) throws Exception {
+    public void updateUserById(UpdatePasswordDTO passwordData, Long id) throws Exception {
         User updatedUser = this.userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         updatedUser.setPassword(passwordData.password());
         this.userRepository.save(updatedUser);
+    }
+
+    @Transactional
+    public void updateUserByDocument(UpdatePasswordDTO passwordData, String document) throws Exception {
+        User updateUser = this.userRepository.findByDocument(document).orElseThrow(UserNotFoundException::new);
+        updateUser.setPassword(passwordData.password());
+        this.userRepository.save(updateUser);
     }
 
     @Transactional

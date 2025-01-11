@@ -24,6 +24,7 @@ public class UserController {
     UserService userService;
 
 
+    // GET
     @Operation(description = "Find a user by ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns the user."),
@@ -56,6 +57,7 @@ public class UserController {
         return new ResponseEntity<>(objs, HttpStatus.OK);
     }
 
+    // POST
     @Operation(description = "Create a user.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created successfully."),
@@ -69,6 +71,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+    // PUT
     @Operation(description = "Change the user's password by ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User's password changed successfully."),
@@ -77,8 +80,21 @@ public class UserController {
     })
     @Validated
     @PutMapping("/id/{id}")
-    public ResponseEntity<Void> updateUser(@Valid @RequestBody UpdatePasswordDTO passwordData, @PathVariable Long id) throws Exception {
-        this.userService.updateUser(passwordData, id);
+    public ResponseEntity<Void> updateUserById(@Valid @RequestBody UpdatePasswordDTO passwordData, @PathVariable Long id) throws Exception {
+        this.userService.updateUserById(passwordData, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(description = "Change the user's password by document.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User's password changed successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid password."),
+            @ApiResponse(responseCode = "404", description = "The document doesn't belong to any user.")
+    })
+    @Validated
+    @PutMapping("/document/{document}")
+    public ResponseEntity<Void> updateUserByDocument(@Valid @RequestBody UpdatePasswordDTO passwordData, @PathVariable String document) throws Exception {
+        this.userService.updateUserByDocument(passwordData, document);
         return ResponseEntity.noContent().build();
     }
 
