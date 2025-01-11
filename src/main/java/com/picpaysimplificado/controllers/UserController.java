@@ -24,7 +24,7 @@ public class UserController {
     UserService userService;
 
 
-    // GET
+    // GET MAPPINGS
     @Operation(description = "Find a user by ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns the user."),
@@ -57,7 +57,7 @@ public class UserController {
         return new ResponseEntity<>(objs, HttpStatus.OK);
     }
 
-    // POST
+    // POST MAPPINGS
     @Operation(description = "Create a user.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created successfully."),
@@ -71,7 +71,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    // PUT
+    // PUT MAPPINGS
     @Operation(description = "Change the user's password by ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User's password changed successfully."),
@@ -98,14 +98,26 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    // DELETE MAPPINGS
     @Operation(description = "Delete a user by ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User deleted successfully."),
             @ApiResponse(responseCode = "404", description = "The ID doesn't belong to any user.")
     })
     @DeleteMapping("/id/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) throws Exception {
-        this.userService.deleteUser(id);
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) throws Exception {
+        this.userService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(description = "Delete a user by document.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted successfully."),
+            @ApiResponse(responseCode = "404", description = "The document doesn't belong to any user.")
+    })
+    @DeleteMapping("/document/{document}")
+    public ResponseEntity<Void> deleteUserByDocument(@PathVariable String document) throws Exception {
+        this.userService.deleteUserByDocument(document);
         return ResponseEntity.noContent().build();
     }
 }

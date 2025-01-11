@@ -77,11 +77,19 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long id) throws Exception {
+    public void deleteUserById(Long id) throws Exception {
         // Poderia utilizar o método findUsuarioById, porém traria um retorno de um objeto Usuário desnecessário
         if (!this.userRepository.existsById(id))
             throw new UserNotFoundException();
 
         this.userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteUserByDocument(String document) throws Exception {
+        if (!this.userRepository.existsByDocument(document))
+            throw new UserNotFoundException();
+
+        this.userRepository.deleteByDocument(document);
     }
 }
