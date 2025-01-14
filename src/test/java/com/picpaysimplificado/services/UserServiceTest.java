@@ -30,15 +30,16 @@ class UserServiceTest {
     private UserService userService;
 
 
-    // Configuração de Usuários
+    // create user shortcut
     private User createUser(BigDecimal balance, UserType type) {
         return new User(1L, "Ana", "Clara", "99999999901", "ana@gmail.com", "123456", balance, type);
     }
 
+    // findUserById
     @Test
     @DisplayName("Must throw UserNotFoundException if user not found by id.")
     public void findUserByIdFailedUserNotFound() {
-        // Jogando a exceçeção caso o usuário não seja encontrado
+        // Throwing an exception if the user is not found
         Assertions.assertThrows(UserNotFoundException.class, () -> {
             this.userService.findUserById(1L);
         });
@@ -49,20 +50,21 @@ class UserServiceTest {
     public void findUserByIdSuccess() throws Exception {
         User user = createUser(new BigDecimal("10"), UserType.COMMON);
 
-        // Preparando retorno do método findById
+        // Preparing the return values of findById method
         when(this.userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         User mockedUser = this.userService.findUserById(1L);
 
-        // Verificando se o usuário foi retornado corretamente
+        // Verifying if the user has been returned correctly
         Assertions.assertEquals(user, mockedUser, "The user must match the mocked user.");
         verify(this.userRepository, times(1)).findById(1L);
     }
 
+    // findUserByDocument
     @Test
     @DisplayName("Must throw UserNotFoundException if user not found by document.")
     public void findUserByDocumentFailedUserNotFound() {
-        // Jogando a exceçeção caso o usuário não seja encontrado
+        // Throwing an exception if the user is not found
         Assertions.assertThrows(UserNotFoundException.class, () -> {
             this.userService.findUserByDocument("99999999902");
         });
@@ -73,22 +75,23 @@ class UserServiceTest {
     public void findUserByDocumentSuccess() throws Exception {
         User user = createUser(new BigDecimal("10"), UserType.COMMON);
 
-        // Preparando retorno do método findUsuarioByDocument
+        // Preparing the return values of findByDocument method
         when(this.userRepository.findByDocument("99999999901")).thenReturn(Optional.of(user));
 
         User mockedUser = this.userService.findUserByDocument("99999999901");
 
-        // Verificando se o usuário foi retornado corretamente
+        // Verifying if the user has been returned correctly
         Assertions.assertEquals(user, mockedUser, "The user must match the mocked user.");
         verify(this.userRepository, times(1)).findByDocument("99999999901");
     }
 
+    // validateTransaction
     @Test
     @DisplayName("Must throw MerchantTransactionNotAllowedException when a merchant tries to perform a transaction.")
     void validateTransactionFailedMerchantTransactionNotAllowed() {
         User sender = createUser(new BigDecimal("10"), UserType.MERCHANT);
 
-        // Jogando a exceção caso o usuário seja um lojista tentando realizar uma transação
+        // Throwing an exception if a merchant attempts to perform a transaction
         Assertions.assertThrows(MerchantTransactionNotAllowedException.class, () -> {
             this.userService.validateTransaction(sender, new BigDecimal("10"));
         });
@@ -99,21 +102,23 @@ class UserServiceTest {
     void validateTransactionFailedInsufficientBalance() {
         User sender = createUser(new BigDecimal("10"), UserType.COMMON);
 
-        // Jogando a exceçeção caso o saldo do usuário seja insuficiente
+        // Throwing an exception if user's balance is insufficient
         Assertions.assertThrows(InsufficientBalanceException.class, () -> {
             this.userService.validateTransaction(sender, new BigDecimal("50"));
         });
     }
 
+
+    // createUser
     @Test
     @DisplayName("Must throw EmailAlreadyExistsException when attempting to register a user with an already registered email.")
     void createUserFailedEmailAlreadyExists() {
         UserDTO userData = new UserDTO("Kopan", "Almeida", "99999999901", "kop@gmail.com", "123456", new BigDecimal("10"), UserType.COMMON);
 
-        // Preparando retorno do método existByEmail
+        // Preparing the return values of existByEmail method
         when(this.userRepository.existsByEmail(userData.email())).thenReturn(true);
 
-        // Jogando a exceção caso o email já esteja cadastrado no banco de dados
+        // Throwing an exception if the email is already registered in database
         Assertions.assertThrows(EmailAlreadyExistsException.class, () -> {
             this.userService.createUser(userData);
         });
@@ -124,10 +129,10 @@ class UserServiceTest {
     void createUserFailedDocumentAlreadyExists() {
         UserDTO userData = new UserDTO("Kopan", "Almeida", "99999999901", "kop@gmail.com", "123456", new BigDecimal("10"), UserType.COMMON);
 
-        // Preparando retorno do método existByEmail
+        // Preparing the return values of existByDocument method
         when(this.userRepository.existsByDocument(userData.document())).thenReturn(true);
 
-        // Jogando a exceção caso o email já esteja cadastrado no banco de dados
+        // Throwing an exception if the document is already registered in database
         Assertions.assertThrows(DocumentAlreadyExistsException.class, () -> {
             this.userService.createUser(userData);
         });
@@ -138,20 +143,21 @@ class UserServiceTest {
     void createUserSuccess() throws Exception {
         UserDTO userData = new UserDTO("Kopan", "Almeida", "99999999901", "kop@gmail.com", "123456", new BigDecimal("10"), UserType.COMMON);
 
-        // Preparando retorno dos método de validação
+        // Preparing the return values of existByEmail and existsByDocument methods
         when(this.userRepository.existsByEmail(userData.email())).thenReturn(false);
         when(this.userRepository.existsByDocument(userData.document())).thenReturn(false);
 
         this.userService.createUser(userData);
 
-        // Verificando se o usuário foi salvo no banco de dados
+        // Verifying if the user has been saved correctly
         verify(this.userRepository, times(1)).save(any());
     }
 
+    // updateUserById
     @Test
     @DisplayName("Must throw UserNotFoundException exception when attempting to update a user that doesn't exist.")
     void updateUserByIdFailedNotFound() {
-        // Jogando a exceção caso o usuário não exista
+        // Throwing an exception if the user is not found
         Assertions.assertThrows(UserNotFoundException.class, () -> {
             this.userService.updateUserById(new UpdatePasswordDTO("654321"), 99L);
         });
@@ -162,20 +168,21 @@ class UserServiceTest {
     void updateUserByIdSuccess() throws Exception {
         User user = createUser(new BigDecimal("10"), UserType.COMMON);
 
-        // Preparando retorno dos método de validação
+        // Preparing the return values of findById method
         when(this.userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         this.userService.updateUserById(new UpdatePasswordDTO("654321"), 1L);
 
-        // Verificando se a senha foi alterada
+        // Verifying if the password has been updated
         verify(this.userRepository, times(1)).save(argThat(Usuario ->
                 Usuario.getPassword().equals("654321")));
     }
 
+    // deleteUserById
     @Test
     @DisplayName("Must throw UserNotFoundException exception when attempting to delete a user that doesn't exist.")
     void deleteUserByIdFailedIdNotFound() {
-        // Jogando a exceção caso o usuário não exista
+        // Throwing an exception if the user is not found
         Assertions.assertThrows(UserNotFoundException.class, () -> {
             this.userService.deleteUserById(1L);
         });
@@ -184,12 +191,12 @@ class UserServiceTest {
     @Test
     @DisplayName("Must delete the user when everything is correct.")
     void deleteUserByIdSuccess() throws Exception {
-        // Preparando retorno dos método de validação
+        // Preparing the return values of existById method
         when(this.userRepository.existsById(1L)).thenReturn(true);
 
         this.userService.deleteUserById(1L);
 
-        // Verificando se o usuário foi alterada
+        // Verifying if the user has been deleted
         verify(this.userRepository, times(1)).deleteById(1L);
     }
 }

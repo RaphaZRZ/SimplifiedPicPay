@@ -21,8 +21,8 @@ import java.math.BigDecimal;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
-@DataJpaTest // Indica que é uma classe de testes
-@ExtendWith(MockitoExtension.class) // Integração com Mockito e JUnit 5, instancia os mocks
+@DataJpaTest
+@ExtendWith(MockitoExtension.class) // Integration with Mockito and JUnit 5, initializes the mocks
 class TransactionServiceTest {
     @Mock
     private TransactionRepository transactionRepository;
@@ -40,14 +40,12 @@ class TransactionServiceTest {
     private TransactionService transactionService;
 
 
-    // Configuração de Usuários
+    // create user shortcut
     private User createUsuario(Long id, String nome, String sobrenome, BigDecimal balance) {
         return new User(id, nome, sobrenome, "9999999990" + id, nome.toLowerCase() + "@gmail.com", "123456", balance, UserType.COMMON);
     }
 
-    // Configuração de Mocks Padrão
-    private void setupMockForUsuarios(User sender,
-            User receiver) throws Exception {
+    private void setupMockForUsers(User sender, User receiver) throws Exception {
         when(userService.findUserById(sender.getId())).thenReturn(sender);
         when(userService.findUserById(receiver.getId())).thenReturn(receiver);
     }
@@ -56,15 +54,15 @@ class TransactionServiceTest {
     @Test
     @DisplayName("Must throw UnauthorizedTransactionException when transaction is unauthorized.")
     public void createTransactionFailedUnauthorizedTransaction() throws Exception {
-        // Criando usuários de teste
+        // Creating test users
         User sender = createUsuario(1L, "Ana", "Clara", new BigDecimal("10"));
         User receiver = createUsuario(2L, "Bernardo", "Artheus", new BigDecimal("20"));
+        setupMockForUsers(sender, receiver);
 
-        // Definindo o que ocorrerá na chamada de cada método mockado na hora de testar o método principal
-        setupMockForUsuarios(sender, receiver);
+        // Preparing the return value of transactionIsAuthorized method
         when(this.authorizationService.transactionIsAuthorized()).thenReturn(false);
 
-        // Verificar se a exceção foi lançada
+        // Throwing an exception if the transaction is unauthorized
         Assertions.assertThrows(UnauthorizedTransactionException.class, () -> {
             TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal("10"), 1L, 2L);
             this.transactionService.createTransaction(transactionDTO);
@@ -74,22 +72,22 @@ class TransactionServiceTest {
     @Test
     @DisplayName("Must rollback transaction and throw NotificationServiceOfflineException when notification service is offline.")
     public void createTransactionFailedNotificationServiceIsOffline() throws Exception {
-        // Criando usuários de teste
+        // Creating test users
         User sender = createUsuario(1L, "Ana", "Clara", new BigDecimal("10"));
         User receiver = createUsuario(2L, "Bernardo", "Artheus", new BigDecimal("20"));
+        setupMockForUsers(sender, receiver);
 
-        // Definindo o que ocorrerá na chamada de cada método mockado na hora de testar o método principal
-        setupMockForUsuarios(sender, receiver);
+        // Preparing the return values of transactionIsAuthorized and notifyUserIsOnline methods
         when(this.authorizationService.transactionIsAuthorized()).thenReturn(true);
         when(this.notificationService.notifyUserIsOnline()).thenReturn(false);
 
-        // Verificar se a exceção foi lançada
+        // Throwing an exception if notification service is offline
         Assertions.assertThrows(NotificationServiceOfflineException.class, () -> {
             TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal("10"), 1L, 2L);
             this.transactionService.createTransaction(transactionDTO);
         });
 
-        // Verifica se o saldo foi modificado e devolvido após o estorno da transação
+        // Verifying if the sender's money has been returned successfully
         Assertions.assertEquals(new BigDecimal("10"), sender.getBalance());
         Assertions.assertEquals(new BigDecimal("20"), receiver.getBalance());
         verify(this.userService, times(2)).saveUser(sender);
@@ -99,32 +97,32 @@ class TransactionServiceTest {
     @Test
     @DisplayName("Must create transaction in DB when everything is ok.")
     public void createTransactionSuccess() throws Exception {
-        // Criando usuários de teste
+        // Creating test users
         User sender = createUsuario(1L, "Ana", "Clara", new BigDecimal("10"));
         User receiver = createUsuario(2L, "Bernardo", "Artheus", new BigDecimal("20"));
+        setupMockForUsers(sender, receiver);
 
-        // Definindo o que ocorrerá na chamada de cada método mockado na hora de testar o método principal
-        setupMockForUsuarios(sender, receiver);
+        // Preparing the return values of transactionIsAuthorized and notifyUserIsOnline methods
         when(this.authorizationService.transactionIsAuthorized()).thenReturn(true);
         when(this.notificationService.notifyUserIsOnline()).thenReturn(true);
 
-        // Criando transação
+        // creating transacation
         TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal("10"), 1L, 2L);
 
-        // Iniciando o método createTransaction
+        // Initializing the createTransaction method
         transactionService.createTransaction(transactionDTO);
 
-        // Verificando se o saldo foi modificado e se os usuários foram salvos
+        // Verifying if the users' balances have been updated and saved successfully
         Assertions.assertEquals(new BigDecimal("0"), sender.getBalance());
         Assertions.assertEquals(new BigDecimal("30"), receiver.getBalance());
         verify(this.userService, times(1)).saveUser(sender);
         verify(this.userService, times(1)).saveUser(receiver);
 
-        // Verificar se a notificação foi enviada
+        // Verifying if the notification has been sent
         verify(this.notificationService, times(1)).sendNotification(sender, "Transação realizada com sucesso.");
         verify(this.notificationService, times(1)).sendNotification(receiver, "Transação recebida com sucesso.");
 
-        // Verificar se a transação foi salva
+        // Verifying if the transaction has been saved
         verify(this.transactionRepository).save(argThat(transaction ->
                 transaction.getAmount().equals(new BigDecimal("10")) && transaction.getSender().equals(sender) &&
                         transaction.getReceiver().equals(receiver)));
