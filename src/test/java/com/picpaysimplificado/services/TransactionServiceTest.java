@@ -119,8 +119,8 @@ class TransactionServiceTest {
         verify(this.userService, times(1)).saveUser(receiver);
 
         // Verifying if the notification has been sent
-        verify(this.notificationService, times(1)).sendNotification(sender, "Transação realizada com sucesso.");
-        verify(this.notificationService, times(1)).sendNotification(receiver, "Transação recebida com sucesso.");
+        verify(this.notificationService, times(1)).sendNotification(sender, "Transaction completed successfully.");
+        verify(this.notificationService, times(1)).sendNotification(receiver, "Transaction received successfully.");
 
         // Verifying if the transaction has been saved
         verify(this.transactionRepository).save(argThat(transaction ->
