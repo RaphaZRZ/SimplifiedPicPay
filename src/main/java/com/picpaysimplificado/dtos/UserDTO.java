@@ -8,11 +8,11 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 
 public record UserDTO(
-        @NotNull @Size(min = 3, max = 20, message = "The first name must be between 3 and 20 characters long.") String firstName,
-        @NotNull @Size(min = 3, max = 20, message = "The last name must be between 3 and 20 characters long.") String lastName,
-        @NotNull String document,
-        @NotNull @Email(message = "Invalid email.") String email,
-        @NotNull @Size(min = 6, max = 60, message = "The password must be between 6 and 60 characters long.") String password,
-        @NotNull BigDecimal balance,
-        @NotNull UserType userType) {
+        @NotNull(message = "{firstName.notNull}") @Size(min = 3, max = 20, message = "{firstName.size}") String firstName,
+        @NotNull(message = "{lastName.notNull}") @Size(min = 3, max = 20, message = "{lastName.size}") String lastName,
+        @NotNull(message = "{document.notNull}") String document,
+        @NotNull(message = "{email.notNull}") @Email(message = "{email.invalid}") String email,
+        @NotNull(message = "{password.notNull}") @Size(min = 6, max = 60, message = "{password.size}") String password,
+        @NotNull(message = "{balance.notNull}") BigDecimal balance,
+        @NotNull(message = "{userType.notNull}") UserType userType) {
 }

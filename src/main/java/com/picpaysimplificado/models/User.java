@@ -25,37 +25,37 @@ public class User {
     @Column(name = "id", unique = true)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "{firstName.notNull}")
     @Size(min = 3, max = 20, message = "The first name must be between 3 and 20 characters long.")
     @Column(name = "nome")
     private String firstName;
 
-    @NotNull
+    @NotNull(message = "{lastName.notNull}")
     @Size(min = 3, max = 20, message = "The last name must be between 3 and 20 characters long.")
     @Column(name = "sobrenome")
     private String lastName;
 
-    @NotNull
+    @NotNull(message = "{document.notNull}")
     @JsonSerialize(using = DocumentSerializer.class)
     @Column(name = "documento", unique = true)
     private String document;
 
-    @NotNull
-    @Email(message = "Invalid email.")
+    @NotNull(message = "{email.notNull}")
+    @Email(message = "{email.invalid}")
     @Column(name = "Email", unique = true)
     private String email;
 
-    @NotNull
-    @Size(min = 6, max = 60, message = "The password must be between 6 and 60 characters long.")
+    @NotNull(message = "{password.notNull}")
+    @Size(min = 6, max = 60, message = "{password.size}")
     @JsonSerialize(using = PasswordSerializer.class)
     @Column(name = "senha")
     private String password;
 
-    @NotNull
+    @NotNull(message = "{balance.notNull}")
     @Column(name = "saldo")
     private BigDecimal balance;
 
-    @NotNull
+    @NotNull(message = "{userType.notNull}")
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
     private UserType userType;
