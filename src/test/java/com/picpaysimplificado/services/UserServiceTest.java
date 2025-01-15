@@ -32,7 +32,7 @@ class UserServiceTest {
 
     // create user shortcut
     private User createUser(BigDecimal balance, UserType type) {
-        return new User(1L, "Ana", "Clara", "99999999901", "ana@gmail.com", "123456", balance, type);
+        return new User(1L, "Ana", "Clara", "00000000001", "ana@gmail.com", "defaultPassword", balance, type);
     }
 
     // findUserById
@@ -155,8 +155,8 @@ class UserServiceTest {
 
     // updateUserById
     @Test
-    @DisplayName("Must throw UserNotFoundException exception when attempting to update a user that doesn't exist.")
-    void updateUserByIdFailedNotFound() {
+    @DisplayName("Must throw UserNotFoundException when attempting to update a non-existent user.")
+    void updateUserByIdFailedUserNotFound() {
         // Throwing an exception if the user is not found
         Assertions.assertThrows(UserNotFoundException.class, () -> {
             this.userService.updateUserById(new UpdatePasswordDTO("654321"), 99L);
@@ -168,10 +168,35 @@ class UserServiceTest {
     void updateUserByIdSuccess() throws Exception {
         User user = createUser(new BigDecimal("10"), UserType.COMMON);
 
-        // Preparing the return values of findById method
+        // Preparing the return value of findById method
         when(this.userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         this.userService.updateUserById(new UpdatePasswordDTO("654321"), 1L);
+
+        // Verifying if the password has been updated
+        verify(this.userRepository, times(1)).save(argThat(Usuario ->
+                Usuario.getPassword().equals("654321")));
+    }
+
+    // updateUserByDocument
+    @Test
+    @DisplayName("Must throw UserNotFoundException when attempting to update a non-existent user.")
+    void updateUserByDocumentFailedUserNotFound() {
+        // Throwing an exception if the user is not found
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            this.userService.updateUserByDocument(new UpdatePasswordDTO("999999"), "99999999999");
+        });
+    }
+
+    @Test
+    @DisplayName("Must update the user's password when everything is correct.")
+    void updateUserBydDocumentSuccess() throws Exception{
+        User user = createUser(new BigDecimal("10"), UserType.COMMON);
+
+        // Preparing the return value of findByDocument method
+        when(this.userRepository.findByDocument("99999999901")).thenReturn(Optional.of(user));
+
+        this.userService.updateUserByDocument(new UpdatePasswordDTO("654321"), "99999999901");
 
         // Verifying if the password has been updated
         verify(this.userRepository, times(1)).save(argThat(Usuario ->
@@ -198,5 +223,27 @@ class UserServiceTest {
 
         // Verifying if the user has been deleted
         verify(this.userRepository, times(1)).deleteById(1L);
+    }
+
+    // deleteUserByDocument
+    @Test
+    @DisplayName("Must throw UserNotFoundException exception when attempting to delete a user that doesn't exist.")
+    void deleteUserByDocumentFailedDocumentNotFound() {
+        // Throwing an exception if the user is not found
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            this.userService.deleteUserByDocument("99999999999");
+        });
+    }
+
+    @Test
+    @DisplayName("Must delete the user when everything is correct.")
+    void deleteUserByDocumentSuccess() throws Exception {
+        // Preparing the return values of existById method
+        when(this.userRepository.existsByDocument("99999999901")).thenReturn(true);
+
+        this.userService.deleteUserByDocument("99999999901");
+
+        // Verifying if the user has been deleted
+        verify(this.userRepository, times(1)).deleteByDocument("99999999901");
     }
 }
