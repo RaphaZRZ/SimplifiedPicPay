@@ -1,7 +1,11 @@
 package com.picpaysimplificado.dtos;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 
-// Data Transfers Objects
-public record TransactionDTO(BigDecimal amount, Long senderId, Long receiverId) {
+public record TransactionDTO(
+        @NotNull(message = "{amount.notNull}") BigDecimal amount,
+        @NotNull(message = "{sender.notNull}") Long senderId,
+        @NotNull(message = "{receiver.notNull}") Long receiverId) {
 }

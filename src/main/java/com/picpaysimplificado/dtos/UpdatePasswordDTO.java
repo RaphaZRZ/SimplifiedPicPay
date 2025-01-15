@@ -4,5 +4,5 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record UpdatePasswordDTO(
-        @NotNull(message = "The password cannot be null.") @Size(min = 6, max = 60, message = "The password must be between 6 and 60 characters long.") String password) {
+        @NotNull(message = "{password.notNull}") @Size(min = 6, max = 60, message = "{password.size}") String password) {
 }

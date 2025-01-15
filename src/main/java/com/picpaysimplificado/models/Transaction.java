@@ -20,21 +20,21 @@ public class Transaction {
     @Column(name = "id", unique = true)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "{amount.notNull}")
     @Column(name = "valor")
     private BigDecimal amount;
 
     @ManyToOne
-    @NotNull
+    @NotNull(message = "{sender.notNull}")
     @JoinColumn(name = "pagador_id")
     private User sender;
 
     @ManyToOne
-    @NotNull
+    @NotNull(message = "{receiver.notNull}")
     @JoinColumn(name = "recebedor_id")
     private User receiver;
 
-    @NotNull
+    @NotNull(message = "{timestamp.notNull}")
     @Column(name = "horario_transacao")
     private LocalDateTime timestamp;
 }

@@ -7,6 +7,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,26 +21,26 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(InvalidCPFException.class)
     public ResponseEntity<ExceptionDTO> handleInvalidCPFException(InvalidCPFException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.badRequest().body(exceptionDTO);
+        return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
     // Invalid CNPJ
     @ExceptionHandler(InvalidCNPJException.class)
     public ResponseEntity<ExceptionDTO> handleInvalidCNPJException(InvalidCNPJException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.badRequest().body(exceptionDTO);
+        return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
     // Insufficient balance
     @ExceptionHandler(InsufficientBalanceException.class)
     public ResponseEntity<ExceptionDTO> handleInsufficientBalanceException(InsufficientBalanceException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.badRequest().body(exceptionDTO);
+        return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
     // Invalid data
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ExceptionDTO> handleDeserialization(HttpMessageNotReadableException exception) {
+    public ResponseEntity<ExceptionDTO> handleDeserialization() {
         ExceptionDTO exceptionDTO = new ExceptionDTO("Deserialization error. Invalid data.", 400);
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
@@ -54,8 +55,13 @@ public class ControllerExceptionHandler {
     // Validate BEAN annotations when an object is invalid as an argument of an endpoint
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionDTO> handleBeanValidationException(MethodArgumentNotValidException exception) {
-        String errorMessage = exception.getBindingResult().getAllErrors().stream().findFirst().map(ObjectError::getDefaultMessage).orElse("Validation error.");
-        ExceptionDTO exceptionDTO = new ExceptionDTO(errorMessage, 400);
+        StringBuilder errorMessage = new StringBuilder("Validation errors: ");
+        exception.getBindingResult().getAllErrors().forEach(error -> {
+            String message = error.getDefaultMessage();
+            errorMessage.append(String.format("%s; ", message));
+        });
+
+        ExceptionDTO exceptionDTO = new ExceptionDTO(errorMessage.toString(), 400);
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
@@ -71,32 +77,32 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(MerchantTransactionNotAllowedException.class)
     public ResponseEntity<ExceptionDTO> handleMerchantTransactionNotAllowedException(MerchantTransactionNotAllowedException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.status(403).body(exceptionDTO);
+        return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
     // Unauthorized transaction
     @ExceptionHandler(UnauthorizedTransactionException.class)
     public ResponseEntity<ExceptionDTO> handleUnauthorizedTransactionException(UnauthorizedTransactionException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.status(403).body(exceptionDTO);
+        return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
     // User not found
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ExceptionDTO> handleUserNotFoundException(UserNotFoundException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.status(404).body(exceptionDTO);
+        return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
     // Class controller not found
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ExceptionDTO> handleControllerNotFoundException(NoHandlerFoundException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO("Non-existent controller for this URL", 404);
-        return ResponseEntity.status(404).body(exceptionDTO);
+        return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ExceptionDTO> handle404(EntityNotFoundException exception) {
+    public ResponseEntity<ExceptionDTO> handle404() {
         ExceptionDTO exceptionDTO = new ExceptionDTO("Resource not found.", 404);
         return ResponseEntity.status(404).body(exceptionDTO);
     }
@@ -105,19 +111,19 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(DocumentAlreadyExistsException.class)
     public ResponseEntity<ExceptionDTO> handleDocumentAlreadyExistsException(DocumentAlreadyExistsException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.badRequest().body(exceptionDTO);
+        return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
     // Email already registered
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ExceptionDTO> handleEmailAlreadyExistsException(EmailAlreadyExistsException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.badRequest().body(exceptionDTO);
+        return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
     // User already registered
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ExceptionDTO> handleDuplicateEntry(DataIntegrityViolationException exception) {
+    public ResponseEntity<ExceptionDTO> handleDuplicateEntry() {
         ExceptionDTO exceptionDTO = new ExceptionDTO("User already registered.", 409);
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
@@ -126,7 +132,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(NotificationServiceOfflineException.class)
     public ResponseEntity<ExceptionDTO> handleNotificationServiceOfflineException(NotificationServiceOfflineException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), exception.getStatusCode());
-        return ResponseEntity.internalServerError().body(exceptionDTO);
+        return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
     @ExceptionHandler(Exception.class)
