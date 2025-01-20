@@ -7,8 +7,6 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -101,6 +99,7 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
+    // Entity not found
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionDTO> handle404() {
         ExceptionDTO exceptionDTO = new ExceptionDTO("Resource not found.", 404);
@@ -135,6 +134,7 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(exception.getStatusCode()).body(exceptionDTO);
     }
 
+    // Generals exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDTO> handleGeneralException(Exception exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), 500);

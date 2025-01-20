@@ -45,7 +45,7 @@ public class UserService {
 
     @Transactional
     public User createUser(UserDTO userData) throws Exception {
-        // Verifica se as informações únicas já estão cadastradas no banco de dados
+        // Verify if the unique information has already been registered in the database
         if (this.userRepository.existsByEmail(userData.email()))
             throw new EmailAlreadyExistsException();
         if (this.userRepository.existsByDocument(userData.document()))
@@ -78,7 +78,7 @@ public class UserService {
 
     @Transactional
     public void deleteUserById(Long id) throws Exception {
-        // Poderia utilizar o método findUsuarioById, porém traria um retorno de um objeto Usuário desnecessário
+        // Could use the findUserById method, but it would return an unnecessary object
         if (!this.userRepository.existsById(id))
             throw new UserNotFoundException();
 
